@@ -1,20 +1,25 @@
 const express = require('express');
 const morgan = require('morgan');
-const path = require('path');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 const app = express();
 
+//
+const authRoute = require('./routes/auth.routes');
+
 // Configuración
-dotenv.config({path:  '.env'});
-const conexion = require('./db/database');
+app.use(cors());
+dotenv.config({path: '.env'});
+require('./db/database');
 
 // Middlewares
-app.use(express.urlencoded({extended: false}));
-app.use(express.json());
 app.use(morgan('dev'));
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
 
 // Rutas
+app.use('/api', authRoute);
 
 // Servidor
 app.listen(3000, () => {

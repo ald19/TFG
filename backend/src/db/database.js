@@ -1,13 +1,14 @@
 const mysql = require('mysql');
+const { promisify } = require('util');
 
-const conexion = mysql.createConnection({
+const connection = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE
 });
 
-conexion.connect((err) => {
+connection.connect((err) => {
     if(err){
         console.log('Error en la conexión: ', err);
         return;
@@ -16,4 +17,6 @@ conexion.connect((err) => {
     }
 });
 
-module.exports = conexion;
+connection.query = promisify(connection.query);
+
+module.exports = connection;
