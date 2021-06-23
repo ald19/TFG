@@ -7,6 +7,7 @@ const app = express();
 
 //
 const authRoute = require('./routes/auth.routes');
+const recipesRoute = require('./routes/recipes.routes');
 
 // Configuración
 app.use(cors());
@@ -20,6 +21,7 @@ app.use(express.urlencoded({extended: false}));
 
 // Rutas
 app.use('/api', authRoute);
+app.use('/api/recetas', recipesRoute);
 
 // Servidor
 app.listen(3000, () => {
