@@ -19,7 +19,7 @@ async function register(req, res){
 
     await connection.query(sql, [body], async(err, results) => {
         if(err){
-            res.status(400).send('Ya hay un usuario registrado con ese email');
+            res.status(400).send('Ya hay un usuario registrado con ese email o faltan campos');
         } else{
             res.status(200).send('El usuario ha sido registrado correctamente');
         }
