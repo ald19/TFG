@@ -8,7 +8,7 @@ describe('POST /api/login', () => {
     it('Se devuelve un mensaje "Login completado" si el login se ha realizado correctamente', done => {
         const data = {
             email: 'alex@ua.es',
-            password: '2345'
+            password: '12345'
         }
         request(app)
             .post('/api/login')
