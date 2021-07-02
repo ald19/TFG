@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS recetas (
     descripcion VARCHAR(255) DEFAULT NULL,
     duracion VARCHAR(25) DEFAULT NULL,
     extra VARCHAR(255) DEFAULT NULL,
+    fecha_publicacion date NOT NULL,
     valoracion DOUBLE DEFAULT 0.0,
     id_usuario INT(6) NOT NULL,
     PRIMARY KEY (id),
