@@ -28,6 +28,7 @@ describe('GET /api/recipes/:id', () => {
                 nombre: "Pollo con salsa",
                 descripcion: "Un pollo con una salsa especiada",
                 duracion: "30min",
+                extra: null,
                 valoracion: 0,
                 id_usuario: 1
             })
