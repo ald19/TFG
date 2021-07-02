@@ -43,6 +43,7 @@ async function postRecipe(req, res){
         descripcion: description ? description : null,
         duracion: duration ? duration : null,
         extra: extra ? extra : null,
+        fecha_publicacion: new Date(),
         id_usuario: id_usuario
     }
 
@@ -94,10 +95,51 @@ async function addStepToRecipe(req, res){
     });
 }
 
+async function getRecipeByFood(req, res){
+    const query = req.query;
+    const alimentos = [];
+
+    for(var alimento in query){
+        if(query.hasOwnProperty(alimento)){
+            alimentos.push(Number(query[alimento]));
+        }
+    }
+
+    const sql = 'SELECT id_receta, GROUP_CONCAT(id_alimento) AS alimentos FROM alimentos_recetas WHERE id_alimento IN (?) GROUP BY id_receta';
+    await connection.query(sql, [alimentos], async(err, results) => {
+        if(err){
+            console.log(err);
+        } else{
+            let recipes = await checkRecipeContainsFood(alimentos, results)
+            res.status(200).json(recipes);
+        }
+    });
+}
+
+async function checkRecipeContainsFood(food, results){
+    let recipes = [];
+
+    for(var i = 0; i < results.length; i++){
+        let cont = 0;
+
+        food.forEach(aux => {
+            if(results[i].alimentos.includes(aux.toString())){
+                cont++;
+            }
+        })
+        if(cont == food.length){
+            recipes.push({ id_receta: results[i].id_receta });
+        }
+    }
+
+    return recipes;
+}
+
 module.exports = {
     getRecipes,
     getRecipe,
     postRecipe,
     addFoodToRecipe,
-    addStepToRecipe
+    addStepToRecipe,
+    getRecipeByFood
 }
