@@ -41,7 +41,7 @@ async function login(req, res) {
                     expiresIn: 60 * 60 * 24
                 });
                 
-                res.status(200).header('Authorization', token).send('Login completado');
+                res.status(200).header('Authorization', token).json({token: token, msg: 'Login completado'});
             }
         });
     }
