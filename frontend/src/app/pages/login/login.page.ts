@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,9 +10,12 @@ import { AuthService } from '../services/auth.service';
 })
 export class LoginPage implements OnInit {
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService, private router: Router) { }
 
   ngOnInit() {
+    if(this.authService.loggedIn()){
+      this.router.navigate(['/']);
+    }
   }
 
   login(form: NgForm){
@@ -19,6 +23,7 @@ export class LoginPage implements OnInit {
       .subscribe(
         res => {
           localStorage.setItem('token', res.token);
+          this.router.navigate(['/']);
         },
         err => {
           console.log(err)
