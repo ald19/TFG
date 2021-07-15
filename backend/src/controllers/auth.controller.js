@@ -21,7 +21,7 @@ async function register(req, res){
         if(err){
             res.status(400).send('Ya hay un usuario registrado con ese email o faltan campos');
         } else{
-            res.status(200).send('El usuario ha sido registrado correctamente');
+            res.status(200).json({msg: 'El usuario ha sido registrado correctamente'});
         }
     });
     
