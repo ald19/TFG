@@ -21,7 +21,7 @@ async function register(req, res){
         if(err){
             res.status(400).send('Ya hay un usuario registrado con ese email o faltan campos');
         } else{
-            res.status(200).send('El usuario ha sido registrado correctamente');
+            res.status(200).json({msg: 'El usuario ha sido registrado correctamente'});
         }
     });
     
@@ -41,7 +41,7 @@ async function login(req, res) {
                     expiresIn: 60 * 60 * 24
                 });
                 
-                res.status(200).header('Authorization', token).send('Login completado');
+                res.status(200).header('Authorization', token).json({token: token, msg: 'Login completado'});
             }
         });
     }

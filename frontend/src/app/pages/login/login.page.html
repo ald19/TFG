@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="container">
+    <ion-list-header class="ion-text-center">
+        <ion-label style="font-size: large;">NombreAPP</ion-label>
+    </ion-list-header>
+
+    <ion-avatar>
+      <img src="../../assets/login/logo.jpg">
+    </ion-avatar>
+
+    <br>
+
+    <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input [(ngModel)]="authService.user.email" name="email" type="text" required></ion-input>
+      </ion-item>
+  
+      <br>
+
+      <ion-item lines="full">
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input [(ngModel)]="authService.user.password" name="password" type="password" required></ion-input>
+      </ion-item>
+  
+      <br>
+
+      <ion-row>
+        <ion-col>
+          <ion-button type="submit" color="primary" expand="block">Iniciar sesión</ion-button>
+        </ion-col>
+      </ion-row>
+    </form>
+
+    <br>
+
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-label position="fixed">¿No tienes cuenta?</ion-label>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-button [routerLink]="['/registro']" color="danger">Regístrate</ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-label position="fixed">O accede como invitado</ion-label>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-button  [routerLink]="['/']" color="success">Invitado</ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+
+</ion-content>

@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Registro</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <form #loginForm="ngForm" (ngSubmit)="register(loginForm)">
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input [(ngModel)]="authService.user.name" name="name" type="text" required></ion-input>
+      </ion-item>
+  
+      <br>
+
+      <ion-item>
+        <ion-label position="floating">Nombre de usuario</ion-label>
+        <ion-input [(ngModel)]="authService.user.nickname" name="nickname" type="text" required></ion-input>
+      </ion-item>
+  
+      <br>
+
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input [(ngModel)]="authService.user.email" name="email" type="text" required></ion-input>
+      </ion-item>
+  
+      <br>
+
+      <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input [(ngModel)]="authService.user.password" name="password" type="password" required></ion-input>
+      </ion-item>
+  
+      <br>
+
+      <ion-item lines="full">
+        <ion-label position="floating">Confirmar contraseña</ion-label>
+        <ion-input [(ngModel)]="passConf" name="passConf" type="password" required></ion-input>
+      </ion-item>
+  
+      <br>
+
+      <ion-item lines="full">
+        <ion-label position="floating">Fecha de nacimiento</ion-label>
+        <br>
+        <ion-input [(ngModel)]="authService.user.birth_date" name="birth_date" type="date" required></ion-input>
+      </ion-item>
+  
+      <br>
+
+      <ion-row>
+        <ion-col>
+          <ion-button type="submit" color="primary" expand="block">Registrar</ion-button>
+        </ion-col>
+      </ion-row>
+    </form>
+
+    <br>
+
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-label position="fixed">¿Ya tienes cuenta?</ion-label>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-button [routerLink]="['/login']" color="danger">Inicia sesión</ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>
