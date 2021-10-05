@@ -26,8 +26,7 @@ export class RegisterPage implements OnInit {
   }
 
   register(form: NgForm){
-    console.log(form.value)
-
+    
     if(form.value.password != form.value.passConf){
       this.showAlert("Las contraseñas no coinciden")
       form.reset();
@@ -38,7 +37,6 @@ export class RegisterPage implements OnInit {
           this.router.navigate(['/login']);
         },
         err => {
-          console.log(err.error)
           this.showAlert(err.error)
           form.reset();
         });
@@ -48,7 +46,7 @@ export class RegisterPage implements OnInit {
 
   async showAlert(msg: string){
     await this.alertController.create({
-      header: "Error al iniciar sesión",
+      header: "Error en el registro",
       message: msg,
       buttons: ['OK']
     }).then(res => res.present());

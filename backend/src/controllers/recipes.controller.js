@@ -33,6 +33,22 @@ async function getRecipe(req, res){
     });
 }
 
+async function getUserRecipe(req, res){
+    const { id } = req.params;
+    const sql = 'SELECT nickname FROM usuarios WHERE id = ?';
+
+    await connection.query(sql, [id], async(err, results) => {
+        if(err){
+            console.log(err);
+        }
+        else if(results.length == 0){
+            res.status(404).send('No se han encontrado resultados');
+        } else{
+            res.status(200).json(results[0]);
+        }
+    });
+}
+
 async function postRecipe(req, res){
     const { id_usuario } = req.params;
     const { name, description, duration, extra } = req.body;
@@ -141,5 +157,6 @@ module.exports = {
     postRecipe,
     addFoodToRecipe,
     addStepToRecipe,
-    getRecipeByFood
+    getRecipeByFood,
+    getUserRecipe
 }

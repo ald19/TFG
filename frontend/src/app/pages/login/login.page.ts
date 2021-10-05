@@ -31,7 +31,6 @@ export class LoginPage implements OnInit {
           this.router.navigate(['/']);
         },
         err => {
-          console.log(err.error)
           this.showAlert(err.error)
           form.reset();
         });
