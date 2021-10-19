@@ -1,6 +1,8 @@
 const dotenv = require('dotenv');
 dotenv.config({path: '.env'});
 const connection = require('../db/database');
+const fs = require('fs');
+const multer = require('multer');
 
 async function getRecipes(req, res){
     const sql = 'SELECT * FROM recetas';
@@ -33,6 +35,22 @@ async function getRecipe(req, res){
     });
 }
 
+async function getUserRecipe(req, res){
+    const { id } = req.params;
+    const sql = 'SELECT nickname FROM usuarios WHERE id = ?';
+
+    await connection.query(sql, [id], async(err, results) => {
+        if(err){
+            console.log(err);
+        }
+        else if(results.length == 0){
+            res.status(404).send('No se han encontrado resultados');
+        } else{
+            res.status(200).json(results[0]);
+        }
+    });
+}
+
 async function postRecipe(req, res){
     const { id_usuario } = req.params;
     const { name, description, duration, extra } = req.body;
@@ -51,6 +69,12 @@ async function postRecipe(req, res){
         if(err){
             res.status(400).send('Faltan campos o no existe el usuario');
         } else{
+            if(!fs.existsSync(`src/images/${body.id_usuario}`)){
+                fs.mkdirSync(`src/images/${body.id_usuario}`);
+            }
+            if(!fs.existsSync(`src/images/${body.id_usuario}/${results.insertId}`)){
+                fs.mkdirSync(`src/images/${body.id_usuario}/${results.insertId}`);
+            }
             res.status(200).send('La receta se ha publicado correctamente');
         }
     });
@@ -141,5 +165,6 @@ module.exports = {
     postRecipe,
     addFoodToRecipe,
     addStepToRecipe,
-    getRecipeByFood
+    getRecipeByFood,
+    getUserRecipe
 }

@@ -7,11 +7,13 @@ const {
     postRecipe,
     addFoodToRecipe,
     addStepToRecipe,
-    getRecipeByFood
+    getRecipeByFood,
+    getUserRecipe
 } = require('../controllers/recipes.controller.js')
 
 router.get('/', getRecipes);
 router.get('/:id', getRecipe);
+router.get('/user/:id', getUserRecipe)
 router.post('/:id_usuario', postRecipe);
 router.post('/:id/agregarAlimento', addFoodToRecipe);
 router.post('/:id/agregarPaso', addStepToRecipe);

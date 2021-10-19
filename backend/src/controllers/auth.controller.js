@@ -5,17 +5,15 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 async function register(req, res){
-    const { name, nickname, email, password, birth_date } = req.body;
-    let pass = await encryptPassword(password);
+    let pass = await encryptPassword(req.body.password);
 
     const sql = 'INSERT INTO usuarios SET ?';
     const body = {
-        nombre: name,
-        nickname: nickname,
-        email: email,
-        contraseña: pass,
-        fecha_nacimiento: birth_date
+        ...req.body,
+        contraseña: pass
     }
+    delete body['password'];
+    delete body['passConf'];
 
     await connection.query(sql, [body], async(err, results) => {
         if(err){

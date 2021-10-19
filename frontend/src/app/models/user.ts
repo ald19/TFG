@@ -1,17 +1,17 @@
 export class User {
-    constructor(id = -1, name = '', nickname = '', email = '', password = '', birth_date = ''){
+    constructor(id = -1, nombre = '', nickname = '', email = '', password = '', fecha_nacimiento = ''){
         this.id = id,
-        this.name = name,
+        this.nombre = nombre,
         this.nickname = nickname,
         this.email = email,
         this.password = password,
-        this.birth_date = birth_date
+        this.fecha_nacimiento = fecha_nacimiento
     }
 
     id: number;
-    name: string;
+    nombre: string;
     nickname: string;
     email: string;
     password: string;
-    birth_date: string;
+    fecha_nacimiento: string;
 }
