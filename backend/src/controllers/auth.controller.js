@@ -12,6 +12,8 @@ async function register(req, res){
         ...req.body,
         contraseña: pass
     }
+    delete body['password'];
+    delete body['passConf'];
 
     await connection.query(sql, [body], async(err, results) => {
         if(err){

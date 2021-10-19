@@ -12,7 +12,7 @@
     <form #loginForm="ngForm" (ngSubmit)="register(loginForm)">
       <ion-item>
         <ion-label position="floating">Nombre</ion-label>
-        <ion-input [(ngModel)]="authService.user.name" name="name" type="text" required></ion-input>
+        <ion-input [(ngModel)]="authService.user.nombre" name="nombre" type="text" required></ion-input>
       </ion-item>
   
       <br>
@@ -48,7 +48,7 @@
       <ion-item lines="full">
         <ion-label position="floating">Fecha de nacimiento</ion-label>
         <br>
-        <ion-input [(ngModel)]="authService.user.birth_date" name="birth_date" type="date" required></ion-input>
+        <ion-input [(ngModel)]="authService.user.fecha_nacimiento" name="fecha_nacimiento" type="date" required></ion-input>
       </ion-item>
   
       <br>

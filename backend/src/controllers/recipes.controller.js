@@ -1,6 +1,8 @@
 const dotenv = require('dotenv');
 dotenv.config({path: '.env'});
 const connection = require('../db/database');
+const fs = require('fs');
+const multer = require('multer');
 
 async function getRecipes(req, res){
     const sql = 'SELECT * FROM recetas';
@@ -67,6 +69,12 @@ async function postRecipe(req, res){
         if(err){
             res.status(400).send('Faltan campos o no existe el usuario');
         } else{
+            if(!fs.existsSync(`src/images/${body.id_usuario}`)){
+                fs.mkdirSync(`src/images/${body.id_usuario}`);
+            }
+            if(!fs.existsSync(`src/images/${body.id_usuario}/${results.insertId}`)){
+                fs.mkdirSync(`src/images/${body.id_usuario}/${results.insertId}`);
+            }
             res.status(200).send('La receta se ha publicado correctamente');
         }
     });
