@@ -2,10 +2,11 @@ const dotenv = require('dotenv');
 dotenv.config({path: '.env'});
 const connection = require('../db/database');
 const fs = require('fs');
-const multer = require('multer');
+const async = require('async');
+const base64 = require("byte-base64");
 
 async function getRecipes(req, res){
-    const sql = 'SELECT * FROM recetas';
+    const sql = 'SELECT r.*, u.nickname FROM recetas r LEFT JOIN usuarios u ON r.id_usuario = u.id';
 
     await connection.query(sql, async(err, results) => {
         if(err){
@@ -21,7 +22,7 @@ async function getRecipes(req, res){
 
 async function getRecipe(req, res){
     const { id } = req.params;
-    const sql = 'SELECT * FROM recetas WHERE id = ?';
+    const sql = 'SELECT r.*, u.nickname FROM recetas r LEFT JOIN usuarios u ON r.id_usuario = u.id WHERE r.id = ?';
 
     await connection.query(sql, [id], async(err, results) => {
         if(err){
@@ -35,18 +36,28 @@ async function getRecipe(req, res){
     });
 }
 
-async function getUserRecipe(req, res){
+async function getFoodOfRecipe(req, res){
     const { id } = req.params;
-    const sql = 'SELECT nickname FROM usuarios WHERE id = ?';
+    const sql = 'SELECT a.nombre, ar.cantidad, a.unidades from alimentos_recetas ar LEFT JOIN alimentos a ON a.id = ar.id_alimento WHERE ar.id_receta = ?';
 
     await connection.query(sql, [id], async(err, results) => {
         if(err){
             console.log(err);
-        }
-        else if(results.length == 0){
-            res.status(404).send('No se han encontrado resultados');
         } else{
-            res.status(200).json(results[0]);
+            res.status(200).json(results);
+        }
+    });
+}
+
+async function getStepsByRecipe(req, res){
+    const { id } = req.params;
+    const sql = 'SELECT id, descripcion FROM pasos WHERE id_receta = ?';
+
+    await connection.query(sql, [id], async(err, results) => {
+        if(err){
+            console.log(err);
+        } else{
+            res.status(200).json(results);
         }
     });
 }
@@ -86,8 +97,8 @@ async function addFoodToRecipe(req, res){
 
     const sql = 'INSERT INTO alimentos_recetas SET ?';
     const body = {
-        id_alimento: id_food,
         id_receta: id,
+        id_alimento: id_food,
         cantidad: quantity
     }
 
@@ -140,6 +151,44 @@ async function getRecipeByFood(req, res){
     });
 }
 
+async function postRecipeImages(req, res){
+    const { id } = req.params;
+    
+    let dir = req.body.id_usuario + '/' + id;
+    let filename = req.file.filename;
+    
+    await fs.rename('./src/images/' + filename, './src/images/' + dir + '/' + filename, function (err) {
+        if (err)
+            res.send(err);
+
+        res.status(200).json({});
+    });
+}
+
+async function getImagesFromRecipe(req, res){
+    const { id } = req.params;
+    const { id_usuario } = req.query;
+    const dir = './src/images/' + id_usuario + '/' + id;
+
+    fs.readdir(dir, function(err, files) {
+        if(err)
+            res.send(err)
+        else{
+            var filesPath = files.map(function(file) {
+                return dir + '/' + file;
+              });
+              
+            let imgs = [];
+            filesPath.map(path => {
+                const contents = fs.readFileSync(path, {encoding: 'base64'});
+                imgs.push(contents)
+            })
+            
+            res.json({images: imgs})
+        }
+    });
+}
+
 async function checkRecipeContainsFood(food, results){
     let recipes = [];
 
@@ -166,5 +215,8 @@ module.exports = {
     addFoodToRecipe,
     addStepToRecipe,
     getRecipeByFood,
-    getUserRecipe
+    getFoodOfRecipe,
+    getStepsByRecipe,
+    postRecipeImages,
+    getImagesFromRecipe
 }

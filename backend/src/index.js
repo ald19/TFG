@@ -2,12 +2,12 @@ const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const cors = require('cors');
-
-const app = express();
-
-//
+const path = require('path');
 const authRoute = require('./routes/auth.routes');
 const recipesRoute = require('./routes/recipes.routes');
+
+// Inicialización
+const app = express();
 
 // Configuración
 app.use(cors());

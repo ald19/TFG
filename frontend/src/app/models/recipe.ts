@@ -1,5 +1,5 @@
 export class Recipe {
-    constructor(id = -1, nombre = '', descripcion = '', duracion = '', extra = '', fecha_publicacion = '', valoracion = 0, id_usuario = -1, nickname = ''){
+    constructor(id = -1, nombre = '', descripcion = '', duracion = '', extra = '', fecha_publicacion = '', valoracion = 0, id_usuario = -1, nickname = '', imagenes = []){
         this.id = id,
         this.nombre = nombre,
         this.descripcion = descripcion,
@@ -8,7 +8,8 @@ export class Recipe {
         this.fecha_publicacion = fecha_publicacion,
         this.valoracion = valoracion,
         this.id_usuario = id_usuario,
-        this.nickname = nickname
+        this.nickname = nickname,
+        this.imagenes = []
     }
 
     id: number;
@@ -20,4 +21,5 @@ export class Recipe {
     valoracion: number;
     id_usuario: number;
     nickname: string;
+    imagenes: string[];
 }

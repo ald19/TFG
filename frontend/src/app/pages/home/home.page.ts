@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 import { Recipe } from 'src/app/models/recipe';
 import { RecipesService } from 'src/app/services/recipes.service';
 
@@ -9,32 +11,29 @@ import { RecipesService } from 'src/app/services/recipes.service';
 })
 export class HomePage implements OnInit {
 
-  constructor(public recipesService: RecipesService) { }
+	constructor(public recipesService: RecipesService, private route: ActivatedRoute, private sanitizer: DomSanitizer) { }
 
-  ngOnInit() {
-    this.getRecipes();
-  }
+	ngOnInit() {
+		this.getRecipes();
+	}
 
-  getRecipes(){
-    this.recipesService.getRecipes()
-      .subscribe(res => {
-        this.recipesService.recipes = res as Recipe[];
-        this.getUserRecipe(this.recipesService.recipes)
-        console.log(this.recipesService.recipes)
-      })
-  }
+	getRecipes(){
+		this.recipesService.getRecipes()
+		.subscribe(res => {
+			this.recipesService.recipes = res as Recipe[];
+			this.getImages();
+		})
+	}
 
-  getUserRecipe(recipes: Recipe[]){
-    recipes.map((recipe, i) => {
-      this.recipesService.getUserRecipe(recipe.id_usuario.toString())
-        .subscribe(res => {
-          let aux = {
-            ...recipe,
-            nickname: res['nickname']
-          }
-          this.recipesService.recipes[i] = aux;
-        })
-    })
-  }
+	getImages(){
+		this.recipesService.recipes.forEach((e, i) => {
+			this.recipesService.getRecipeImages(e.id.toString(), e.id_usuario)
+			.subscribe((data: any) => {
+				if(data.images && data.images.length)
+					this.recipesService.recipes[i].imagenes = data.images.map((img: string) => this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' + img))
+			});
+		})
+		
+	}
 
 }
