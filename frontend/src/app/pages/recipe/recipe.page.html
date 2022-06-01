@@ -40,7 +40,7 @@
 			</ion-buttons>
 		</ion-item> 
 
-		<ion-item lines="none" *ngIf="recipesService.steps && recipesService.steps.length">
+		<ion-item lines="none" *ngIf="recipesService.selectedRecipe.descripcion">
 			<ion-list style="width: 100vw;">
 				<ion-list-header style="border-bottom: 2px solid #24A19C;"> <h3>Descripción</h3> </ion-list-header>
 				<ion-item lines="none">

@@ -33,3 +33,14 @@
     --background: #222831;
     --color: #fff
 }
+
+.modal-class{
+    --background: #222;
+    position: fixed;
+    top: 25%;
+    left: 15%;
+    z-index: 1050;
+    width: 90%;
+    height: 40%;
+    margin-left: -10%;
+}

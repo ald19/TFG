@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar ion-toolbar class="toolbar-color">
+  <ion-title class="ion-text-start">NombreApp</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-fab horizontal="end" vertical="top" slot="fixed" edge>
+    <ion-fab-button (click)="addStep()" color="warning" style="width: 45px; height: 45px;">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-list style="width: 100vw; min-height: 100vh; max-height: 3000px;">
+    <ion-list-header ><h2 style="text-align: center; width: 95%;">¿Qué pasos debemos seguir?</h2> </ion-list-header>
+    <ion-grid style="width: 80vw;" *ngIf="steps.length">
+      <div *ngFor="let f of steps; let i = index">
+        <ion-row>
+          <ion-col size="7" class="ion-no-padding">
+            <p>Paso {{i+1}}:</p>
+          </ion-col>
+          <ion-col size="4" class="ion-no-padding">
+            <input style="display: none" type="file" (change)="loadImage($event, i)" #fileInput>
+            <ion-button (click)="fileInput.click()" color="secondary">Añadir imagen</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-textarea rows="4" [value]="steps[i].description" (ionChange)="changeText($event, i)"></ion-textarea>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-between">
+          <ion-col size="4" class="ion-no-padding" *ngIf="steps[i].image" >
+            <ion-button (click)="removeImage(i)" size="small" color="warning">Eliminar imagen</ion-button>
+          </ion-col>
+          <ion-col size="4" class="ion-no-padding">
+            <ion-button (click)="recipesService.removeItemFromArray(steps, i)" size="small" color="danger">Borrar paso</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="steps[i].image" >
+          <ion-col>
+            <ion-item lines="none" style="padding-left: 0;">
+              <img style="max-width:100%; text-align: center; max-height:100%;"  [src]="steps[i].image" class="thumb-img" imageViewer />
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <br />
+      </div>
+      <ion-row *ngIf="steps.length">
+        <ion-col>
+          <ion-button (click)="addSteps()" expand="full">CONTINUAR</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    
+  </ion-list>
+</ion-content>

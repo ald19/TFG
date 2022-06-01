@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar ion-toolbar class="toolbar-color">
+  <ion-title class="ion-text-start">NombreApp</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<ion-fab horizontal="end" vertical="top" slot="fixed" edge>
+  <ion-fab-button (click)="openModal()" color="warning" style="width: 45px; height: 45px;">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+<ion-fab horizontal="end" vertical="bottom" slot="fixed">
+  <ion-fab-button (click)="addFoodToRecipe()" color="primary" style="width: 45px; height: 45px;">
+    <ion-icon name="arrow-forward-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+
+<ion-list style="width: 100vw; min-height: 100vh; max-height: 3000px;">
+  <ion-list-header ><h2 style="text-align: center; width: 95%;">¿Qué alimentos vas a usar?</h2> </ion-list-header>
+  <ion-grid style="width: 80vw;" *ngIf="recipesService.foodRecipe.length">
+    <ion-row *ngFor="let f of recipesService.foodRecipe; let i = index">
+      <ion-col size="6" class="ion-no-padding" >
+          <p>{{f.name}}</p>
+      </ion-col>
+      <ion-col size="4" class="ion-no-padding">
+          <p>{{f.quantity}} {{f.ud}}</p>
+      </ion-col>
+      <ion-col size="2">
+          <ion-button (click)="recipesService.removeItemFromArray(recipesService.foodRecipe, i)" color="danger">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+</ion-list>
+</ion-content>
