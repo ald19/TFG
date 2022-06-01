@@ -18,7 +18,23 @@ const routes: Routes = [
       },
       {
         path: 'recipe/:id',
-        loadChildren: () => import('../../pages//recipe/recipe.module').then( m => m.RecipePageModule)
+        loadChildren: () => import('../../pages/recipe/recipe.module').then( m => m.RecipePageModule)
+      },
+      {
+        path: 'new-recipe',
+        loadChildren: () => import('../../pages/new-recipe/new-recipe.module').then( m => m.NewRecipePageModule)
+      },
+      {
+        path: 'add-food',
+        loadChildren: () => import('../../pages/add-food/add-food.module').then( m => m.AddFoodPageModule)
+      },
+      {
+        path: 'add-food-modal',
+        loadChildren: () => import('../../pages/add-food-modal/add-food-modal.module').then( m => m.AddFoodModalPageModule)
+      },
+      {
+        path: 'recipe-steps',
+        loadChildren: () => import('../../pages/recipe-steps/recipe-steps.module').then( m => m.RecipeStepsPageModule)
       }
     ]
   }

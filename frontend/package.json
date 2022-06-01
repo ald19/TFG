@@ -1,7 +1,7 @@
 {
-  "name": "frontend",
+  "name": "cookiteasy",
   "version": "0.0.1",
-  "author": "Ionic Framework",
+  "author": "Alejandro Lopez",
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",

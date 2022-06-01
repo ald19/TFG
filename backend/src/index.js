@@ -5,6 +5,7 @@ const cors = require('cors');
 const path = require('path');
 const authRoute = require('./routes/auth.routes');
 const recipesRoute = require('./routes/recipes.routes');
+const foodRoute = require('./routes/food.routes');
 
 // Inicialización
 const app = express();
@@ -22,6 +23,7 @@ app.use(express.urlencoded({extended: false}));
 // Rutas
 app.use('/api', authRoute);
 app.use('/api/recetas', recipesRoute);
+app.use('/api/alimentos', foodRoute);
 
 // Servidor
 app.listen(3000, () => {

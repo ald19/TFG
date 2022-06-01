@@ -1,0 +1,62 @@
+<ion-header>
+	<ion-toolbar ion-toolbar class="toolbar-color">
+  		<ion-title class="ion-text-center">Añadir alimento</ion-title>
+		<ion-buttons slot="end" style="margin-right: 5%;">
+			<ion-icon  style="height: 25px; width: 25px;" (click)="closeModal()" name="close-circle"></ion-icon>
+		</ion-buttons>
+  	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<form #foodForm="ngForm" (ngSubmit)="addFood(foodForm)">
+		<div style="height: 50%; margin-top: 10%;">
+			<ion-grid>
+				<ion-row>
+					<ion-col size="4" class="ion-no-padding">
+						<ion-list style="width: 100%;">
+							<ion-item lines="none">
+								<ion-label text-wrap><span>Alimento:</span></ion-label>
+							</ion-item>
+						</ion-list>
+					</ion-col>
+					<ion-col size="8" class="ion-no-padding">
+						<ion-list style="width: 95%;">
+							<ion-item class="ion-no-padding">
+								<input name="alimento" type="text" list="food" placeholder="Escribe..." style="border: none;" [(ngModel)]="recipesService.newRecipeFood.id_food">
+							</ion-item>
+						</ion-list>
+						<datalist id="food">
+							<div *ngFor="let f of allFood">
+								<option [value]="f.nombre"></option>
+							</div>
+						</datalist>
+					</ion-col>
+				</ion-row>
+				<br>
+				<ion-row>
+					<ion-col size="4" class="ion-no-padding">
+						<ion-list style="width: 100%;">
+							<ion-item lines="none">
+								<ion-label text-wrap><span>Cantidad:</span></ion-label>
+							</ion-item>
+						</ion-list>
+					</ion-col>
+					<ion-col size="8" class="ion-no-padding">
+						<ion-list style="width: 95%;">
+							<ion-item class="ion-no-padding">
+								<ion-input placeholder="Escribe..." name="cantidad" type="number" [(ngModel)]="recipesService.newRecipeFood.quantity"></ion-input>
+							</ion-item>
+						</ion-list>
+					</ion-col>
+				</ion-row>
+				<br>
+				<ion-row>
+					<ion-col>
+						<ion-button color="warning" type="submit" expand="block">Añadir</ion-button>
+					</ion-col>
+				</ion-row>
+			</ion-grid>
+		</div>
+		
+	</form>
+</ion-content>
