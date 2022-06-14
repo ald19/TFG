@@ -15,7 +15,6 @@ export class AddFoodModalPage implements OnInit {
   	constructor(public modalController: ModalController, public recipesService: RecipesService) { }
 
   	ngOnInit(){
-		console.log(this.recipesService.foodRecipe)
     	this.getAllFood();
   	}
 

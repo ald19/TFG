@@ -14,9 +14,8 @@ describe('POST /api/login', () => {
             .post('/api/login')
             .send(data)
             .set('Accept', 'application/json')
-            .expect('Content-Type', /text/)
+            .expect('Content-Type', /json/)
             .expect(200)
-            .expect('Login completado')
             .end(err => {
                 if(err) return done(err);
                 done();
@@ -48,19 +47,19 @@ describe('POST /api/login', () => {
  describe('POST /api/registro', () => {
     it('Se devuelve un mensaje "El usuario ha sido registrado correctamente" indicando que el registro se ha realizado correctamente', done => {
         const data = {
-            name: 'test',
+            nombre: 'test',
             nickname: 'test',
             email: 'test@ua.es',
             password: '12345',
-            birth_date: '1980-01-01'
+            fecha_nacimiento: '1980-01-01'
         }
         request(app)
             .post('/api/registro')
             .send(data)
             .set('Accept', 'application/json')
-            .expect('Content-Type', /text/)
+            .expect('Content-Type', /json/)
             .expect(200)
-            .expect('El usuario ha sido registrado correctamente')
+            .expect({msg: 'El usuario ha sido registrado correctamente'})
             .end(err => {
                 if(err) return done(err);
                 done();

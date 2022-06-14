@@ -78,4 +78,17 @@ export class RecipesService {
   deleteImage(id_recipe: string, id_user: string, filename: string){
     return this.http.post(this.URL + `/${id_user}/eliminarImagen/${id_recipe}`, {filename: filename})
   }
+
+  getRecipesByFood(food: number[]){
+    let params = new HttpParams();
+    food.forEach((e, i) => {
+      params = params.append(`id_${i}`, e);
+    });
+    
+    return this.http.get(this.URL + '/obtenerReceta/alimentos', {params: params})
+  }
+
+  getRecipesByName(name: string){
+    return this.http.get(this.URL + '/obtenerReceta/nombreReceta', {params: new HttpParams().append('nombre', name)});
+  }
 }
