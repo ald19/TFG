@@ -20,7 +20,7 @@ const {
     getRecipeByName
 } = require('../controllers/recipes.controller.js')
 
-router.get('/', getRecipes);
+router.get('/:option', getRecipes);
 router.get('/:id', getRecipe);
 router.post('/:id_usuario', postRecipe);
 router.post('/:id/agregarAlimentos', addFoodToRecipe);

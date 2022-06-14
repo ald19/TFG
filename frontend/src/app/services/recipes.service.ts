@@ -27,8 +27,8 @@ export class RecipesService {
     array.splice(pos, 1);
   }
 
-  getRecipes(){
-    return this.http.get(this.URL);
+  getRecipes(option: string){
+    return this.http.get(this.URL + `/${option}`);
   }
 
   getRecipe(id: string){
