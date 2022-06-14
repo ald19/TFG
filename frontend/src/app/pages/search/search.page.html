@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar ion-toolbar class="toolbar-color">
-  <ion-title class="ion-text-start">NombreApp</ion-title>
+  <ion-title class="ion-text-start">CookItEasy</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -10,7 +10,7 @@
     <form #foodForm="ngForm" (ngSubmit)="addFood(foodForm)">
     <ion-row>
       <ion-col>
-        <ion-item lines="none">
+        <ion-item>
           <ion-segment name="segment" [(ngModel)]="segment" color="dark">
             <ion-segment-button value="name" (click)="selectedFood = []">
               <ion-label>Nombre</ion-label>
@@ -65,7 +65,7 @@
               <ion-icon slot="icon-only" name="open-outline"></ion-icon>
             </ion-button>
           </ion-item>
-          
+
           <ion-item lines="none" style="height: auto; padding-left: 0;">
             <div *ngIf="recipe.imagenes">
               <ion-slides centeredSlides="true" zoom="true" slidesPerView="1" pager="true">

@@ -10,15 +10,18 @@ import { RecipesService } from 'src/app/services/recipes.service';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
+	segment: string;
 
-	constructor(public recipesService: RecipesService, private route: ActivatedRoute, private sanitizer: DomSanitizer) { }
+	constructor(public recipesService: RecipesService, private route: ActivatedRoute, private sanitizer: DomSanitizer) {
+		this.segment = "fecha_publicacion";
+	}
 
 	ngOnInit() {
 		this.getRecipes();
 	}
 
 	getRecipes(){
-		this.recipesService.getRecipes()
+		this.recipesService.getRecipes(this.segment)
 		.subscribe(res => {
 			this.recipesService.recipes = res as Recipe[];
 			this.getImages();

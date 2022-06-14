@@ -1,10 +1,21 @@
 <ion-header>
 	<ion-toolbar class="toolbar-color">
-    	<ion-title class="ion-text-start">NombreApp</ion-title>
+    	<ion-title class="ion-text-start">CookItEasy</ion-title>
   	</ion-toolbar>
 </ion-header>
 
 <ion-content>
+	<ion-segment name="segment"  [(ngModel)]="segment" color="dark">
+		<ion-segment-button value="fecha_publicacion" (click)="getRecipes()">
+		<ion-label>Fecha</ion-label>
+		</ion-segment-button>
+		<ion-segment-button value="valoracion" (click)="getRecipes()">
+		<ion-label>Valoración</ion-label>
+		</ion-segment-button>
+		<ion-segment-button value="duracion" (click)="getRecipes()">
+		<ion-label>Duración</ion-label>
+		</ion-segment-button>
+	</ion-segment>
 
   	<ion-list *ngFor="let recipe of recipesService.recipes; let i = index">
 		<ion-item lines="none">
@@ -13,7 +24,7 @@
 			</ion-avatar>
 			<ion-label>
 				<h3>{{recipe.nickname}}</h3>
-				<p>{{recipe.nombre}}</p>
+				<p>{{recipe.nombre}} - {{recipe.duracion}}</p>
 			</ion-label>
 			<ion-button fill="clear" color="medium" [routerLink]="['/tabs/recipe', recipe.id]">
 				<ion-icon slot="icon-only" name="open-outline"></ion-icon>

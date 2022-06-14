@@ -7,7 +7,9 @@ const base64 = require("byte-base64");
 const e = require('express');
 
 async function getRecipes(req, res){
-    const sql = 'SELECT r.*, u.nickname FROM recetas r LEFT JOIN usuarios u ON r.id_usuario = u.id';
+    const {option} = req.params;
+    const order = option == 'duracion' ? ' ASC' : ' DESC'
+    const sql = 'SELECT r.*, u.nickname FROM recetas r LEFT JOIN usuarios u ON r.id_usuario = u.id ORDER BY ' + option + order;
 
     await connection.query(sql, async(err, results) => {
         if(err)
