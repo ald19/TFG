@@ -139,10 +139,36 @@ async function getRecipeByFood(req, res){
         if(err){
             console.log(err);
         } else{
-            let recipes = await checkRecipeContainsFood(alimentos, results)
-            res.status(200).json(recipes);
+            let recipes = await checkRecipeContainsFood(alimentos, results);
+            if(recipes.length){
+                const sql2 = 'SELECT r.*, u.nickname FROM recetas r LEFT JOIN usuarios u ON r.id_usuario = u.id WHERE r.id IN (?) ORDER BY r.fecha_publicacion DESC';
+                await connection.query(sql2, [recipes], async(err, results2) => {
+                    if(err){
+                        console.log(err);
+                    } else{
+                        res.status(200).json(results2);
+                    }
+                });
+            } else{
+                res.status(200).json(recipes);
+            }
         }
     });
+}
+
+async function getRecipeByName(req, res){
+    console.log("ENTRO")
+    const {nombre} = req.query;
+    const aux = `%${nombre}%`;
+    
+    const sql = `SELECT r.*, u.nickname FROM recetas r LEFT JOIN usuarios u ON r.id_usuario = u.id WHERE r.nombre LIKE ? ORDER BY fecha_publicacion DESC`;
+    await connection.query(sql, [aux], async(err, results) => {
+        if(err){
+            console.log(err);
+        } else{
+            res.status(200).json(results);
+        }
+    })
 }
 
 async function postRecipeImages(req, res){
@@ -224,13 +250,11 @@ async function checkRecipeContainsFood(food, results){
         let cont = 0;
 
         food.forEach(aux => {
-            if(results[i].alimentos.includes(aux.toString())){
+            if(results[i].alimentos.includes(aux.toString()))
                 cont++;
-            }
         })
-        if(cont == food.length){
-            recipes.push({ id_receta: results[i].id_receta });
-        }
+        if(cont == food.length)
+            recipes.push(results[i].id_receta);
     }
 
     return recipes;
@@ -250,5 +274,6 @@ module.exports = {
     getAllFood,
     deleteRecipe,
     deleteImage,
-    getImageFromRecipe
+    getImageFromRecipe,
+    getRecipeByName
 }

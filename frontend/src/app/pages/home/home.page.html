@@ -19,13 +19,18 @@
 				<ion-icon slot="icon-only" name="open-outline"></ion-icon>
 			</ion-button>
 		</ion-item>
-
-		<ion-item lines="none" style="height:45%; padding-left: 0;">
-		<ion-slides centeredSlides="true" zoom="true" slidesPerView="1" pager="true">
-			<ion-slide  *ngFor="let img of recipe.imagenes">
-					<img style="max-width:100%; text-align: center; max-height:100%;"  [src]="img" class="thumb-img" imageViewer />
-			</ion-slide>
-		</ion-slides>
+		
+		<ion-item lines="none" style="height: auto; padding-left: 0;">
+			<div *ngIf="recipe.imagenes">
+				<ion-slides centeredSlides="true" zoom="true" slidesPerView="1" pager="true">
+					<ion-slide  *ngFor="let img of recipe.imagenes">
+						<img style="max-width:100%; text-align: center; max-height:100%;"  [src]="img" class="thumb-img" imageViewer />
+					</ion-slide>
+				</ion-slides>
+			</div>
+			<div *ngIf="!recipe.imagenes">
+				<img style="max-width:100%; text-align: center; max-height:100%;" src="../../../assets/recipe/plato-blanco-vacio_74190-1719.webp" class="thumb-img" imageViewer />
+			</div>
 		</ion-item>
 		
 		<ion-item lines="none">

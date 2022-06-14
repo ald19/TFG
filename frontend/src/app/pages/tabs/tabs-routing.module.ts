@@ -35,6 +35,10 @@ const routes: Routes = [
       {
         path: 'recipe-steps',
         loadChildren: () => import('../../pages/recipe-steps/recipe-steps.module').then( m => m.RecipeStepsPageModule)
+      },
+      {
+        path: 'search',
+        loadChildren: () => import('../../pages/search/search.module').then( m => m.SearchPageModule)
       }
     ]
   }
