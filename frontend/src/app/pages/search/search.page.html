@@ -50,9 +50,9 @@
       </ion-col>
     </ion-row>
     </form>
-    <ion-row *ngIf="recipes.length">
+    <ion-row>
       <ion-col>
-        <ion-list *ngFor="let recipe of recipes; let i = index">
+        <ion-list *ngFor="let recipe of recipes | async; let i = index">
           <ion-item lines="none">
             <ion-avatar slot="start">
               <img src="https://icon-library.com/images/avatar-icon-images/avatar-icon-images-4.jpg">
@@ -94,8 +94,8 @@
                     <ion-button fill="clear" color="medium" style="margin-left: auto;">
                       <ion-icon slot="icon-only" name="chatbubble-outline"></ion-icon>
                     </ion-button>
-                    <ion-button fill="clear" color="danger" style="margin-left: auto;">
-                      <ion-icon slot="icon-only" name="heart"></ion-icon>
+                    <ion-button fill="clear" color="danger" style="margin-left: auto;" (click)="checkFav(recipe.id)">
+                      <ion-icon slot="icon-only" [name]="recipe.fav ? 'heart' : 'heart-outline'"></ion-icon>
                     </ion-button>
                   </ion-buttons>
                 </ion-col>

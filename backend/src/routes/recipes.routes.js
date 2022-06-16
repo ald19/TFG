@@ -20,13 +20,13 @@ const {
     getRecipeByName
 } = require('../controllers/recipes.controller.js')
 
-router.get('/:option', getRecipes);
-router.get('/:id', getRecipe);
+router.get('/recetas/:option/:id_usuario', getRecipes);
+router.get('/receta/:id/:id_usuario', getRecipe);
 router.post('/:id_usuario', postRecipe);
 router.post('/:id/agregarAlimentos', addFoodToRecipe);
 router.post('/:id/agregarPaso', addStepToRecipe);
-router.get('/obtenerReceta/alimentos', getRecipeByFood);
-router.get('/obtenerReceta/nombreReceta', getRecipeByName);
+router.get('/:id_usuario/obtenerReceta/alimentos', getRecipeByFood);
+router.get('/:id_usuario/obtenerReceta/nombreReceta', getRecipeByName);
 router.get('/:id/alimentos', getFoodOfRecipe);
 router.get('/:id/pasos', getStepsByRecipe);
 router.post('/:id/imagenes', uploadFile(), postRecipeImages);

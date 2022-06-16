@@ -39,8 +39,8 @@
 				<h2>{{recipesService.selectedRecipe.valoracion}} Me gusta</h2>
 			</ion-label>
 			<ion-buttons slot="end">
-				<ion-button fill="clear" color="danger">
-					<ion-icon slot="icon-only" name="heart"></ion-icon>
+				<ion-button fill="clear" color="danger" style="margin-left: auto;" (click)="checkFav(recipesService.selectedRecipe.id)">
+					<ion-icon slot="icon-only" [name]="recipesService.selectedRecipe.fav ? 'heart' : 'heart-outline'"></ion-icon>
 				</ion-button>
 			</ion-buttons>
 		</ion-item> 

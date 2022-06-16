@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+import { UserService } from './../../services/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Recipe } from './../../models/recipe';
@@ -16,13 +18,14 @@ export class SearchPage implements OnInit {
   allFood: any[];
   selectedFood: number[];
   name: string;
-  recipes: Recipe[];
+  recipes: Observable<Recipe[]>;
 
-  constructor(public recipesService: RecipesService, private route: ActivatedRoute, private sanitizer: DomSanitizer) {
+  constructor(
+    public recipesService: RecipesService, public userService: UserService) {
     this.segment = "name";
     this.selectedFood = [];
     this.name = "";
-    this.recipes = [];
+    this.recipes = recipesService.recipesSearch$;
   }
 
   ngOnInit() {
@@ -33,7 +36,17 @@ export class SearchPage implements OnInit {
 		this.recipesService.getAllFood()
 		.subscribe(resp => {
         this.allFood = resp;
-    	})
+    	});
+  }
+
+  manageOptions(){
+    if(this.name){
+      this.recipesService.getRecipesByName(this.name, '1')
+      .subscribe(resp => this.setRecipes(resp));
+    } else{
+      this.recipesService.getRecipesByFood(this.selectedFood, '1')
+      .subscribe(resp => this.setRecipes(resp));
+    }
   }
 
   addFood(form: NgForm){
@@ -42,37 +55,47 @@ export class SearchPage implements OnInit {
         this.selectedFood.push(e)
       }
     });
-    if(this.name){
-      this.recipesService.getRecipesByName(this.name)
-      .subscribe(resp => {
-        this.setRecipes(resp);
-      })
-    } else{
-      this.recipesService.getRecipesByFood(this.selectedFood)
-      .subscribe(resp => {
-        this.setRecipes(resp);
-      })
-    }
+    this.manageOptions();
   }
 
   setRecipes(data: any){
-    this.recipes = data as Recipe[];
-    this.getImages();
+    const result = data as Recipe[];
+    this.recipesService.getImages(result);
+    this.recipesService.setRecipes$(result, 'search');
+    
+    this.recipesService.getRecipes('fecha_publicacion', '1')
+    .subscribe(res => {
+      const result2 = res as Recipe[];
+      this.recipesService.getImages(result2);
+      this.recipesService.setRecipes$(result2, 'home');
+      const favs = result2.filter(e => e.fav);
+      this.userService.setFavs$(favs);
+    })
   }
-
-	getImages(){
-		this.recipes.forEach((e, i) => {
-			this.recipesService.getRecipeImages(e.id.toString(), e.id_usuario)
-			.subscribe((data: any) => {
-				if(data.images && data.images.length)
-					this.recipes[i].imagenes = data.images.map((img: string) => this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' + img))
-			});
-		})
-		
-	}
 
   isDisabled(){
     return this.name == '' && this.selectedFood.length == 0;
   }
+
+  setFav(id_receta: number){
+		this.userService.setFav('1', id_receta)
+			.subscribe(() => this.manageOptions());
+	}
+
+	removeFav(id_receta: number){
+		this.userService.removeFav('1', id_receta.toString())
+			.subscribe(() => this.manageOptions());
+	}
+
+	checkFav(id_receta: number){
+		this.userService.checkFav('1', id_receta.toString())
+			.subscribe(resp => {
+				const result = resp as Recipe[];
+				if(!result.length)
+					this.setFav(id_receta);
+				else	
+					this.removeFav(id_receta);
+			})
+	}
 
 }
