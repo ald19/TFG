@@ -5,19 +5,8 @@
 </ion-header>
 
 <ion-content>
-	<ion-segment name="segment"  [(ngModel)]="segment" color="dark">
-		<ion-segment-button value="fecha_publicacion" (click)="getRecipes()">
-		<ion-label>Fecha</ion-label>
-		</ion-segment-button>
-		<ion-segment-button value="valoracion" (click)="getRecipes()">
-		<ion-label>Valoración</ion-label>
-		</ion-segment-button>
-		<ion-segment-button value="duracion" (click)="getRecipes()">
-		<ion-label>Duración</ion-label>
-		</ion-segment-button>
-	</ion-segment>
-
-  	<ion-list *ngFor="let recipe of recipes | async; let i = index">
+		<ion-list-header ><h2 style="text-align: center; width: 95%;"><i>Recetas favoritas</i></h2> </ion-list-header>
+  <ion-list *ngFor="let recipe of recipes | async; let i = index">
 		<ion-item lines="none">
 			<ion-avatar slot="start">
 				<img src="https://icon-library.com/images/avatar-icon-images/avatar-icon-images-4.jpg">
@@ -50,7 +39,7 @@
 					<ion-col size="8">
 						<ion-label>
 							<h2>{{recipe.valoracion}} Me gusta</h2>
-							<p><i>27 Comentarios</i></p>
+							<p><i>8 Comentarios</i></p>
 							<p>{{recipe.fecha_publicacion | date: 'dd-MM-YYYY'}}</p>
 						</ion-label>
 					</ion-col>
@@ -59,8 +48,8 @@
 							<ion-button fill="clear" color="medium" style="margin-left: auto;">
 								<ion-icon slot="icon-only" name="chatbubble-outline"></ion-icon>
 							</ion-button>
-							<ion-button fill="clear" color="danger" style="margin-left: auto;" (click)="checkFav(recipe.id)">
-								<ion-icon slot="icon-only" [name]="recipe.fav ? 'heart' : 'heart-outline'"></ion-icon>
+							<ion-button fill="clear" color="danger" style="margin-left: auto;" (click)="removeFav(recipe.id.toString())">
+								<ion-icon slot="icon-only" name="heart"></ion-icon>
 							</ion-button>
 						</ion-buttons>
 					</ion-col>
@@ -68,5 +57,4 @@
 			</ion-grid>
 		</ion-item>
  	</ion-list>
-
 </ion-content>

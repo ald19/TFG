@@ -9,8 +9,6 @@ async function getFavList(req, res){
     await connection.query(sql, [id_usuario], async(err, results) => {
         if(err)
             console.log(err);
-        else if(results.length == 0)
-            res.status(404).json({msg: 'No se han encontrado resultados'});
         else
             res.status(200).json(results);
     });
@@ -38,7 +36,7 @@ async function removeRecipeFromFav(req, res){
     const {id_receta, id_usuario} = req.params;
     const sql = 'DELETE FROM recetas_favoritas WHERE id_usuario = ' + id_usuario + ' AND id_receta = ' + id_receta;
 
-    await connection.query(sql, [id_receta], async(err, results) => {
+    await connection.query(sql, async(err, results) => {
         if(err){
             console.log(err);
         } else{
@@ -47,8 +45,22 @@ async function removeRecipeFromFav(req, res){
     });
 }
 
+async function checkFav(req, res){
+    const {id_receta, id_usuario} = req.params;
+    const sql = 'SELECT * FROM recetas_favoritas WHERE id_usuario = ' + id_usuario + ' AND id_receta = ' + id_receta;
+
+    await connection.query(sql, async(err, results) => {
+        if(err){
+            console.log(err);
+        } else{
+            res.status(200).json(results);
+        }
+    });
+}
+
 module.exports = {
     getFavList,
     setRecipeAsFav,
-    removeRecipeFromFav
+    removeRecipeFromFav,
+    checkFav
 }

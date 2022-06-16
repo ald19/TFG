@@ -7,29 +7,35 @@ const base64 = require("byte-base64");
 const e = require('express');
 
 async function getRecipes(req, res){
-    const {option} = req.params;
+    const {option, id_usuario} = req.params;
     const order = option == 'duracion' ? ' ASC' : ' DESC'
-    const sql = 'SELECT r.*, u.nickname FROM recetas r LEFT JOIN usuarios u ON r.id_usuario = u.id ORDER BY ' + option + order;
+    const sql = `
+        SELECT r.*, u.nickname, CASE WHEN r.id IN (SELECT id_receta FROM recetas_favoritas WHERE id_usuario = ${id_usuario}) THEN TRUE else FALSE END as fav 
+        FROM recetas r 
+        LEFT JOIN usuarios u ON r.id_usuario = u.id 
+        ORDER BY ${option} ${order}
+    `; 
 
     await connection.query(sql, async(err, results) => {
         if(err)
             console.log(err);
-        else if(results.length == 0)
-            res.status(404).json({msg: 'No se han encontrado resultados'});
         else
             res.status(200).json(results);
     });
 }
 
 async function getRecipe(req, res){
-    const { id } = req.params;
-    const sql = 'SELECT r.*, u.nickname FROM recetas r LEFT JOIN usuarios u ON r.id_usuario = u.id WHERE r.id = ?';
+    const { id, id_usuario } = req.params;
+    const sql = `
+        SELECT r.*, u.nickname, CASE WHEN r.id IN (SELECT id_receta FROM recetas_favoritas WHERE id_usuario = ${id_usuario}) THEN TRUE else FALSE END as fav 
+        FROM recetas r 
+        LEFT JOIN usuarios u ON r.id_usuario = u.id 
+        WHERE r.id = ${id}
+    `;
 
-    await connection.query(sql, [id], async(err, results) => {
+    await connection.query(sql, async(err, results) => {
         if(err)
             console.log(err);
-        else if(results.length == 0)
-            res.status(404).json({msg: 'No se han encontrado resultados'});
         else
             res.status(200).json(results[0]);
     });
@@ -41,8 +47,6 @@ async function getAllFood(req, res){
     await connection.query(sql, async(err, results) => {
         if(err)
             console.log(err);
-        else if(results.length == 0)
-            res.status(404).json({msg: 'No se han encontrado resultados'});
         else
             res.status(200).json(results);
     });
@@ -127,6 +131,7 @@ async function addStepToRecipe(req, res){
 }
 
 async function getRecipeByFood(req, res){
+    const {id_usuario} = req.params;
     const query = req.query;
     const alimentos = [];
 
@@ -143,7 +148,13 @@ async function getRecipeByFood(req, res){
         } else{
             let recipes = await checkRecipeContainsFood(alimentos, results);
             if(recipes.length){
-                const sql2 = 'SELECT r.*, u.nickname FROM recetas r LEFT JOIN usuarios u ON r.id_usuario = u.id WHERE r.id IN (?) ORDER BY r.fecha_publicacion DESC';
+                const sql2 = `
+                    SELECT r.*, u.nickname, CASE WHEN r.id IN (SELECT id_receta FROM recetas_favoritas WHERE id_usuario = ${id_usuario}) THEN TRUE else FALSE END as fav 
+                    FROM recetas r 
+                    LEFT JOIN usuarios u ON r.id_usuario = u.id
+                    WHERE r.id IN (?) 
+                    ORDER BY r.fecha_publicacion DESC
+                `;
                 await connection.query(sql2, [recipes], async(err, results2) => {
                     if(err){
                         console.log(err);
@@ -159,12 +170,17 @@ async function getRecipeByFood(req, res){
 }
 
 async function getRecipeByName(req, res){
-    console.log("ENTRO")
+    const {id_usuario} = req.params;
     const {nombre} = req.query;
-    const aux = `%${nombre}%`;
     
-    const sql = `SELECT r.*, u.nickname FROM recetas r LEFT JOIN usuarios u ON r.id_usuario = u.id WHERE r.nombre LIKE ? ORDER BY fecha_publicacion DESC`;
-    await connection.query(sql, [aux], async(err, results) => {
+    const sql = `
+        SELECT r.*, u.nickname, CASE WHEN r.id IN (SELECT id_receta FROM recetas_favoritas WHERE id_usuario = ${id_usuario}) THEN TRUE else FALSE END as fav
+        FROM recetas r
+        LEFT JOIN usuarios u ON r.id_usuario = u.id
+        WHERE r.nombre LIKE '%${nombre}%'
+        ORDER BY fecha_publicacion DESC
+    `;
+    await connection.query(sql, async(err, results) => {
         if(err){
             console.log(err);
         } else{
