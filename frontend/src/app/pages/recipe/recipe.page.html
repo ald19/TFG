@@ -36,7 +36,7 @@
 
 		<ion-item lines="none">
 			<ion-label slot="start">
-				<h2>{{recipesService.selectedRecipe.valoracion}} Me gusta</h2>
+				<h2>{{recipesService.selectedRecipe.me_gusta}} Me gusta</h2>
 			</ion-label>
 			<ion-buttons slot="end">
 				<ion-button fill="clear" color="danger" style="margin-left: auto;" (click)="checkFav(recipesService.selectedRecipe.id)">
@@ -58,7 +58,7 @@
 
 		<ion-item lines="none">
 			<ion-list style="width: 100vw;">
-				<ion-list-header style="border-bottom: 2px solid #F05454;"> <h3>Alimentos</h3> </ion-list-header>
+				<ion-list-header style="border-bottom: 2px solid #24A19C;"> <h3>Alimentos</h3> </ion-list-header>
 				<ion-item lines="none">
 					<ion-grid>
 						<ion-row *ngFor="let food of recipesService.food; let i = index">
@@ -76,7 +76,7 @@
 
 		<ion-item lines="none" *ngIf="recipesService.steps && recipesService.steps.length">
 			<ion-list style="width: 100vw;">
-				<ion-list-header style="border-bottom: 2px solid #30475E;"> <h3>Preparación</h3> </ion-list-header>
+				<ion-list-header style="border-bottom: 2px solid #24A19C;"> <h3>Preparación</h3> </ion-list-header>
 				<ion-item *ngFor="let step of recipesService.steps; let i = index">
 					<ion-grid style="width: auto;">
 						<ion-row >
@@ -98,7 +98,7 @@
 
 		<ion-item lines="none" *ngIf="recipesService.selectedRecipe.extra">
 			<ion-list style="width: 100vw;">
-				<ion-list-header style="border-bottom: 2px solid #F5A962;"> <h3>Consejos</h3> </ion-list-header>
+				<ion-list-header style="border-bottom: 2px solid #24A19C;"> <h3>Consejos</h3> </ion-list-header>
 				<ion-item lines="none">
 					<ion-label text-wrap class="ion-text-justify">
 						<p>{{recipesService.selectedRecipe.extra}}</p>
@@ -111,35 +111,22 @@
 			<ion-grid>
 				<ion-row>
 					<ion-col>
-						<ion-radio-group value="0" >
-							<ion-row style="margin: auto; width: 50vw;">
-								<ion-col style="margin: auto;">
-									<ion-radio value="1"></ion-radio>
-								</ion-col>
-								<ion-col style="margin: auto;">
-									<ion-radio value="2"></ion-radio>
-								</ion-col>
-								<ion-col style="margin: auto;">
-									<ion-radio value="3"></ion-radio>
-								</ion-col>
-								<ion-col style="margin: auto;">
-									<ion-radio value="4"></ion-radio>
-								</ion-col>
-								<ion-col style="margin: auto;">
-									<ion-radio value="5"></ion-radio>
-								</ion-col>
-							</ion-row>
-
-							<ion-row  >
-								<ion-col style="text-align: center;">
-									<ion-label>12 valoraciones</ion-label>
-								</ion-col>
-							</ion-row>
-						</ion-radio-group>
+						<div style="text-align: center;"><h3>Valoración</h3></div>
+					</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col>
+						<div style="text-align: center;">
+							<span style="font-size: 30px;" *ngFor="let e of [].constructor(recipesService.selectedRecipe.valoracion)"><ion-icon name="star" color="warning"></ion-icon></span>
+							<span style="font-size: 30px;" *ngFor="let e of [].constructor(5 - recipesService.selectedRecipe.valoracion)"><ion-icon name="star" color="light"></ion-icon></span>
+						</div>
+						<br>
+						<div style="text-align: center;">
+							<ion-button color="secondary" size="medium" (click)="showComments()">Ver comentarios</ion-button>
+						</div>
 					</ion-col>
 				</ion-row>
 			</ion-grid>
 		</ion-item>
-
   	</ion-list>
 </ion-content>

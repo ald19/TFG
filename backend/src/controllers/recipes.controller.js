@@ -10,7 +10,8 @@ async function getRecipes(req, res){
     const {option, id_usuario} = req.params;
     const order = option == 'duracion' ? ' ASC' : ' DESC'
     const sql = `
-        SELECT r.*, u.nickname, CASE WHEN r.id IN (SELECT id_receta FROM recetas_favoritas WHERE id_usuario = ${id_usuario}) THEN TRUE else FALSE END as fav 
+        SELECT r.*, u.nickname, CASE WHEN r.id IN (SELECT id_receta FROM recetas_favoritas WHERE id_usuario = ${id_usuario}) THEN TRUE else FALSE END as fav,
+        (SELECT COUNT(*) FROM recetas_favoritas WHERE id_receta = r.id) as me_gusta
         FROM recetas r 
         LEFT JOIN usuarios u ON r.id_usuario = u.id 
         ORDER BY ${option} ${order}
@@ -27,7 +28,8 @@ async function getRecipes(req, res){
 async function getRecipe(req, res){
     const { id, id_usuario } = req.params;
     const sql = `
-        SELECT r.*, u.nickname, CASE WHEN r.id IN (SELECT id_receta FROM recetas_favoritas WHERE id_usuario = ${id_usuario}) THEN TRUE else FALSE END as fav 
+        SELECT r.*, u.nickname, CASE WHEN r.id IN (SELECT id_receta FROM recetas_favoritas WHERE id_usuario = ${id_usuario}) THEN TRUE else FALSE END as fav, 
+        (SELECT COUNT(*) FROM recetas_favoritas WHERE id_receta = ${id}) as me_gusta
         FROM recetas r 
         LEFT JOIN usuarios u ON r.id_usuario = u.id 
         WHERE r.id = ${id}

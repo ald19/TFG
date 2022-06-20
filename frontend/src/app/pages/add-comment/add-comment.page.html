@@ -1,0 +1,52 @@
+<ion-header>
+	<ion-toolbar ion-toolbar class="toolbar-color">
+  		<ion-title class="ion-text-center">Añadir comentario</ion-title>
+		<ion-buttons slot="end" style="margin-right: 5%;">
+			<ion-icon  style="height: 25px; width: 25px;" (click)="closeModal()" name="close-circle"></ion-icon>
+		</ion-buttons>
+  	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form #commentForm="ngForm" (ngSubmit)="addComment(commentForm)">
+		<div style="height: 50%; margin-top: 5%;">
+      <ion-grid>
+        <ion-row>
+          <ion-item lines="none">
+            <ion-label text-wrap><span>Valoración:</span></ion-label>
+          </ion-item>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" class="center-rate">
+            <div class="rate">
+              <input type="radio" id="star5" name="valoracion" value="5" [(ngModel)]="newComment.valoracion" />
+              <label for="star5" title="text">5 stars</label>
+              <input type="radio" id="star4" name="valoracion" value="4" [(ngModel)]="newComment.valoracion" />
+              <label for="star4" title="text">4 stars</label>
+              <input type="radio" id="star3" name="valoracion" value="3" [(ngModel)]="newComment.valoracion" />
+              <label for="star3" title="text">3 stars</label>
+              <input type="radio" id="star2" name="valoracion" value="2" [(ngModel)]="newComment.valoracion" />
+              <label for="star2" title="text">2 stars</label>
+              <input type="radio" id="star1" name="valoracion" value="1" [(ngModel)]="newComment.valoracion" />
+              <label for="star1" title="text">1 star</label>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Comentario:</ion-label>
+              <ion-textarea rows="4" [(ngModel)]="newComment.comentario" name="comentario"></ion-textarea>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+				<br>
+				<ion-row>
+					<ion-col>
+						<ion-button color="warning" type="submit" expand="block">Añadir</ion-button>
+					</ion-col>
+				</ion-row>
+			</ion-grid>
+    </div>
+  </form>
+</ion-content>
