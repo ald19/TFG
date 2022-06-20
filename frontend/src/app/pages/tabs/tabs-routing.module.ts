@@ -43,6 +43,10 @@ const routes: Routes = [
       {
         path: 'favs',
         loadChildren: () => import('../../pages/favs/favs.module').then( m => m.FavsPageModule)
+      },
+      {
+        path: 'comments',
+        loadChildren: () => import('../../pages/comments/comments.module').then( m => m.CommentsPageModule)
       }
     ]
   }
