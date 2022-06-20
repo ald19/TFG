@@ -58,9 +58,90 @@ async function checkFav(req, res){
     });
 }
 
+async function getComments(req, res){
+    const {id_receta} = req.params;
+    const sql = 'SELECT * FROM comentarios WHERE id_receta = ?';
+
+    await connection.query(sql, [id_receta], async(err, results) => {
+        if(err){
+            console.log(err);
+        } else{
+            res.status(200).json(results);
+        }
+    });
+}
+
+async function getComment(req, res){
+    const {id_receta, id_usuario} = req.params;
+    const sql = 'SELECT * FROM comentarios WHERE id_usuario = ' + id_usuario + ' AND id_receta = ' + id_receta;
+
+    await connection.query(sql, async(err, results) => {
+        if(err){
+            console.log(err);
+        } else{
+            res.status(200).json(results);
+        }
+    });
+}
+
+async function addComment(req, res){
+    const {id_receta, id_usuario} = req.params;
+    const {comentario, valoracion} = req.body;
+    const sql = 'INSERT INTO comentarios SET ?';
+    const body = {
+        id_receta: id_receta,
+        id_usuario: id_usuario,
+        comentario: comentario,
+        valoracion: valoracion
+    }
+
+    await connection.query(sql, [body], async(err, results) => {
+        if(err){
+            console.log(err)
+            res.status(400).json({msg: 'Faltan campos, no existe el usuario o la receta'});
+        } else{
+            updateRecipeRate(id_receta, res);
+        }
+    });
+}
+
+async function removeComment(req, res){
+    const {id_receta, id_usuario} = req.params;
+    const sql = 'DELETE FROM comentarios WHERE id_usuario = ' + id_usuario + ' AND id_receta = ' + id_receta;
+
+    await connection.query(sql, async(err, results) => {
+        if(err){
+            console.log(err);
+        } else{
+            updateRecipeRate(id_receta, res);
+        }
+    });
+}
+
+async function updateRecipeRate(id_receta, res){
+    const sql2 = `
+    UPDATE recetas SET valoracion = (
+        SELECT ROUND(AVG(valoracion)) as valoracion
+        FROM comentarios
+        WHERE id_receta = ${id_receta}
+    )
+    WHERE id = ${id_receta}`;
+    await connection.query(sql2, async(err, results) => {
+        if(err){
+            console.log(err);
+        } else{
+            res.status(200).json({msg: 'Se ha actualizado la valoración de la receta correctamente'});
+        }
+    });
+} 
+
 module.exports = {
     getFavList,
     setRecipeAsFav,
     removeRecipeFromFav,
-    checkFav
+    checkFav,
+    getComments,
+    getComment,
+    addComment,
+    removeComment
 }
