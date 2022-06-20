@@ -10,12 +10,16 @@ export class UserService {
 
   favRecipes: Recipe[];
   favRecipes$: BehaviorSubject<Recipe[]>;
+  comments: any[];
+  commented: boolean;
 
   readonly URL = 'http://localhost:3000/api/usuario';
 
   constructor(private http: HttpClient) {
     this.favRecipes = [];
     this.favRecipes$ = new BehaviorSubject<Recipe[]>([]);
+    this.comments = [];
+    this.commented = false;
   }
 
   getFavs(id: string){
@@ -30,15 +34,31 @@ export class UserService {
     this.favRecipes$.next(recipes);
   }
 
-  setFav(id_usuario: string, id_receta: number){
-    return this.http.post(this.URL + `/${id_usuario}`, {id_receta: id_receta});
+  setFav(id_user: string, id_recipe: number){
+    return this.http.post(this.URL + `/${id_user}`, {id_receta: id_recipe});
   }
 
-  removeFav(id_usuario: string, id_receta: string){
-    return this.http.get(this.URL + `/${id_usuario}/${id_receta}`);
+  removeFav(id_user: string, id_recipe: string){
+    return this.http.get(this.URL + `/${id_user}/${id_recipe}`);
   }
 
-  checkFav(id_usuario: string, id_receta: string){
-    return this.http.get(this.URL + `/${id_usuario}/check/${id_receta}`);
+  checkFav(id_user: string, id_recipe: string){
+    return this.http.get(this.URL + `/${id_user}/check/${id_recipe}`);
+  }
+
+  getComments(id_recipe: string){
+    return this.http.get(this.URL + `/${id_recipe}/comentarios/all`);
+  }
+
+  getComment(id_recipe: string, id_user: string){
+    return this.http.get(this.URL + `/${id_recipe}/comentario/${id_user}`);
+  }
+
+  addComment(id_recipe: string, id_user: string, comment: any){
+    return this.http.post(this.URL + `/${id_recipe}/comentario/${id_user}`, comment);
+  }
+
+  removeComment(id_recipe: string, id_user: string){
+    return this.http.get(this.URL + `/${id_recipe}/eliminarComentario/${id_user}`);
   }
 }

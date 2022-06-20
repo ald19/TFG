@@ -44,3 +44,14 @@
     height: 40%;
     margin-left: -10%;
 }
+
+.modal-comment{
+    --background: #222;
+    position: fixed;
+    top: 25%;
+    left: 15%;
+    z-index: 1050;
+    width: 90%;
+    height: 47%;
+    margin-left: -10%;
+}

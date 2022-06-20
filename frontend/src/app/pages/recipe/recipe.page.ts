@@ -1,9 +1,10 @@
 import { UserService } from './../../services/user.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from 'src/app/models/recipe';
 import { RecipesService } from 'src/app/services/recipes.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-recipe',
@@ -12,7 +13,17 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class RecipePage implements OnInit {
 
-  	constructor(public recipesService: RecipesService, private route: ActivatedRoute, private sanitizer: DomSanitizer, private userService: UserService) { }
+  	constructor(
+		public recipesService: RecipesService, 
+		private route: ActivatedRoute, 
+		private sanitizer: DomSanitizer, 
+		private userService: UserService,
+		private router: Router
+	) { }
+
+	ionViewWillEnter(){
+		this.ngOnInit();
+	}
 
 	ngOnInit() {
 		this.getRecipe();
@@ -84,5 +95,9 @@ export class RecipePage implements OnInit {
 				else	
 					this.removeFav(id_receta);
 			});
+	}
+
+	showComments(){
+		this.router.navigate([`/tabs/comments/${this.route.snapshot.paramMap.get('id')}`]);
 	}
 }

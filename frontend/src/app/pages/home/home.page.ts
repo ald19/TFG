@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { UserService } from './../../services/user.service';
 import { Component, OnInit } from '@angular/core';
@@ -13,11 +14,17 @@ export class HomePage implements OnInit {
 	segment: string;
 	check: boolean;
 	recipes: Observable<Recipe[]>;
+	comments: number[];
 
-	constructor(public recipesService: RecipesService, public userService: UserService) {
+	constructor(public recipesService: RecipesService, public userService: UserService, private router: Router) {
 		this.recipes = recipesService.recipes$;
 		this.segment = "fecha_publicacion";
 		this.check = false;
+		this.comments = [];
+	}
+
+	ionViewWillEnter(){
+		this.ngOnInit();
 	}
 
 	ngOnInit() {
@@ -54,6 +61,10 @@ export class HomePage implements OnInit {
 				else	
 					this.removeFav(id_receta);
 			});
+	}
+
+	showComments(id_recipe: number){
+		this.router.navigate([`/tabs/comments/${id_recipe.toString()}`]);
 	}
 
 }

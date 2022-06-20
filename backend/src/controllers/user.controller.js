@@ -4,7 +4,14 @@ const connection = require('../db/database');
 
 async function getFavList(req, res){
     const {id_usuario} = req.params;
-    const sql = 'SELECT r.*, u.nickname FROM recetas_favoritas f LEFT JOIN recetas r ON f.id_receta = r.id LEFT JOIN usuarios u ON f.id_usuario = u.id WHERE f.id_usuario = ? ORDER BY r.fecha_publicacion DESC';
+    const sql = `
+        SELECT r.*, u.nickname, (SELECT COUNT(*) FROM recetas_favoritas WHERE id_receta = r.id) as me_gusta 
+        FROM recetas_favoritas f 
+        LEFT JOIN recetas r ON f.id_receta = r.id 
+        LEFT JOIN usuarios u ON f.id_usuario = u.id 
+        WHERE f.id_usuario = ? 
+        ORDER BY r.fecha_publicacion DESC
+    `;
 
     await connection.query(sql, [id_usuario], async(err, results) => {
         if(err)
@@ -60,7 +67,7 @@ async function checkFav(req, res){
 
 async function getComments(req, res){
     const {id_receta} = req.params;
-    const sql = 'SELECT * FROM comentarios WHERE id_receta = ?';
+    const sql = 'SELECT c.*, u.nickname FROM comentarios c LEFT JOIN usuarios u ON c.id_usuario = u.id WHERE id_receta = ?';
 
     await connection.query(sql, [id_receta], async(err, results) => {
         if(err){
