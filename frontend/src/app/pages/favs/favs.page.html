@@ -5,6 +5,10 @@
 </ion-header>
 
 <ion-content>
+	<ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+		<ion-refresher-content></ion-refresher-content>
+	</ion-refresher>
+
 	<ion-list-header ><h2 style="text-align: center; width: 95%;"><i>Recetas favoritas</i></h2> </ion-list-header>
  	<ion-list *ngFor="let recipe of recipes | async; let i = index">
 		<ion-item lines="none">
@@ -43,11 +47,8 @@
 							<p>{{recipe.fecha_publicacion | date: 'dd-MM-YYYY'}}</p>
 						</ion-label>
 					</ion-col>
-					<ion-col size="4">
+					<ion-col size="4" *ngIf="authService.getLoggedUser()">
 						<ion-buttons style="height: 30px;">
-							<ion-button fill="clear" color="medium" style="margin-left: auto;">
-								<ion-icon slot="icon-only" name="chatbubble-outline"></ion-icon>
-							</ion-button>
 							<ion-button fill="clear" color="danger" style="margin-left: auto;" (click)="removeFav(recipe.id.toString())">
 								<ion-icon slot="icon-only" name="heart"></ion-icon>
 							</ion-button>

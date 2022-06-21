@@ -10,7 +10,7 @@
       <ion-col>
         <div style="display: flex; border-bottom: 2px solid #24A19C;">
           <ion-list-header> <h3>Comentarios</h3></ion-list-header>
-          <div *ngIf="!userService.commented">
+          <div *ngIf="!userService.commented && authService.getLoggedUser()">
             <ion-button style="margin-top: 10px;" size="small" color="primary" (click)="openModal()">Añadir comentario</ion-button>
           </div>
         </div>

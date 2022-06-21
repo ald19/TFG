@@ -15,13 +15,11 @@ export class HomePage implements OnInit {
 	segment: string;
 	check: boolean;
 	recipes: Observable<Recipe[]>;
-	comments: number[];
 
-	constructor(public recipesService: RecipesService, public userService: UserService, private router: Router, private authService: AuthService) {
+	constructor(public recipesService: RecipesService, public userService: UserService, private router: Router, public authService: AuthService) {
 		this.recipes = recipesService.recipes$;
 		this.segment = "fecha_publicacion";
 		this.check = false;
-		this.comments = [];
 	}
 
 	ionViewWillEnter(){
@@ -66,6 +64,14 @@ export class HomePage implements OnInit {
 
 	showComments(id_recipe: number){
 		this.router.navigate([`/tabs/comments/${id_recipe.toString()}`]);
+	}
+
+	doRefresh(event: any) {
+		this.ngOnInit();
+
+		setTimeout(() => {
+		  event.target.complete();
+		}, 2000);
 	}
 
 }

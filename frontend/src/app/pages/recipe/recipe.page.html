@@ -38,7 +38,7 @@
 			<ion-label slot="start">
 				<h2>{{recipesService.selectedRecipe.me_gusta}} Me gusta</h2>
 			</ion-label>
-			<ion-buttons slot="end">
+			<ion-buttons slot="end" *ngIf="authService.getLoggedUser()">
 				<ion-button fill="clear" color="danger" style="margin-left: auto;" (click)="checkFav(recipesService.selectedRecipe.id)">
 					<ion-icon slot="icon-only" [name]="recipesService.selectedRecipe.fav ? 'heart' : 'heart-outline'"></ion-icon>
 				</ion-button>

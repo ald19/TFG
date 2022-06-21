@@ -22,7 +22,7 @@ export class SearchPage implements OnInit {
   recipes: Observable<Recipe[]>;
 
   constructor(
-    public recipesService: RecipesService, public userService: UserService, private authService: AuthService) {
+    public recipesService: RecipesService, public userService: UserService, public authService: AuthService) {
     this.segment = "name";
     this.selectedFood = [];
     this.name = "";

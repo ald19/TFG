@@ -25,7 +25,7 @@ export class GuidePage implements OnInit {
     private modalController: ModalController,
     public userService: UserService,
     private router: Router,
-    private authService: AuthService
+    public authService: AuthService
   ) {
     this.section = 'start';
     this.step = 0;

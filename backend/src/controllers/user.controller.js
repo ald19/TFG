@@ -16,7 +16,7 @@ async function getUserInfo(req, res){
         if(err)
             console.log(err);
         else
-            res.status(200).json(results);
+            res.status(200).json(results[0]);
     });
 }
 
@@ -48,6 +48,23 @@ async function getFollowers(req, res){
             console.log(err);
         else
             res.status(200).json(results);
+    });
+}
+
+async function getIsFollowing(req, res){
+    const {id_usuario, id_usuario2} = req.params;
+    const sql = `SELECT * FROM seguimientos WHERE id_usuario1 = ${id_usuario} AND id_usuario2 = ${id_usuario2}`;
+
+    await connection.query(sql, async(err, results) => {
+        if(err)
+            console.log(err);
+        else{
+            if(results.length)
+                res.status(200).json({following: true});
+            else    
+                res.status(200).json({following: false});
+            
+        }
     });
 }
 
@@ -238,6 +255,7 @@ module.exports = {
     getRecipesByUser,
     getFollowers,
     getFollowing,
+    getIsFollowing,
     getFavList,
     setRecipeAsFav,
     removeRecipeFromFav,

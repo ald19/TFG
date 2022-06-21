@@ -55,6 +55,14 @@ const routes: Routes = [
       {
         path: 'guide/:id_recipe',
         loadChildren: () => import('../../pages/guide/guide.module').then( m => m.GuidePageModule)
+      },
+      {
+        path: 'main-profile',
+        loadChildren: () => import('../../pages/profile/profile.module').then( m => m.ProfilePageModule)
+      },
+      {
+        path: 'profile/:id_user',
+        loadChildren: () => import('../../pages/profile/profile.module').then( m => m.ProfilePageModule)
       }
     ]
   }

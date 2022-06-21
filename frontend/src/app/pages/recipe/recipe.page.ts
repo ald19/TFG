@@ -20,7 +20,7 @@ export class RecipePage implements OnInit {
 		private sanitizer: DomSanitizer, 
 		private userService: UserService,
 		private router: Router,
-		private authService: AuthService
+		public authService: AuthService
 	) { }
 
 	ionViewWillEnter(){
