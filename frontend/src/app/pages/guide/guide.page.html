@@ -1,0 +1,100 @@
+<ion-header>
+	<ion-toolbar class="toolbar-color">
+    	<ion-title class="ion-text-start">CookItEasy</ion-title>
+  	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-template [ngIf]="section == 'start'">
+    <ion-list-header style="margin-top: 15%;"><h3 style="text-align: center; width: 95%;"><i>Comenzar la guia de la receta:</i></h3> </ion-list-header>
+    <ion-grid>
+      <ion-row>
+        <ion-col style="text-align: center;">
+          <ion-label>{{recipesService.selectedRecipe.nombre}}</ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-item lines="none" style="height: auto; padding-left: 0;">
+          <div *ngIf="recipesService.selectedRecipe.imagenes">
+            <ion-slides centeredSlides="true" zoom="true" slidesPerView="1" pager="true">
+              <ion-slide  *ngFor="let img of recipesService.selectedRecipe.imagenes">
+                <img style="max-width:100%; text-align: center; max-height:100%;"  [src]="img" class="thumb-img" imageViewer />
+              </ion-slide>
+            </ion-slides>
+          </div>
+          <div *ngIf="recipesService.selectedRecipe.imagenes && !recipesService.selectedRecipe.imagenes.length">
+            <img style="max-width:100%; text-align: center; max-height:100%;" src="../../../assets/recipe/plato-blanco-vacio_74190-1719.webp" class="thumb-img" imageViewer />
+          </div>
+        </ion-item>
+      </ion-row>
+      <ion-row class="container" style="text-align: center;">
+        <ion-col>
+          <h4>Valoración</h4>
+          <div style="font-size: 20px;">{{recipesService.selectedRecipe.valoracion}} <span style="font-size: 16px;"><ion-icon name="star" color="warning"></ion-icon></span></div>
+        </ion-col>
+        <ion-col>
+          <h4>Duración</h4>
+          <div style="font-size: 20px;">{{recipesService.selectedRecipe.duracion}}</div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
+
+  <ng-template [ngIf]="section == 'food'">
+    <ion-list-header style="margin-top: 15%;"><h2 style="text-align: center; width: 95%;"><i>¿Qué vamos a necesitar?</i></h2> </ion-list-header>
+    <div class="container">
+      <ion-item lines="none">
+        <ion-grid style="text-align: center;">
+          <ion-row *ngFor="let food of recipesService.food; let i = index">
+            <ion-col size="6">
+              <ion-label text-wrap><h3>{{food.nombre}}</h3></ion-label>
+            </ion-col>
+            <ion-col size="6">
+              <ion-label text-wrap><p>{{food.cantidad}}{{food.unidades}}</p></ion-label>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </div>
+  </ng-template>
+
+  <ng-template [ngIf]="section == 'steps'">
+    <ion-list-header style="margin-top: 15%;"><h2 style="text-align: center; width: 95%;"><i>Paso {{step+1}}</i></h2> </ion-list-header>
+    <div class="container">
+      <div>
+        <ion-label text-wrap>
+          <p style="text-align: justify; text-justify: inter-word; font-size: 16px; line-height: 1.6;">{{recipesService.steps[step].descripcion}}</p>
+        </ion-label>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template [ngIf]="section == 'end'">
+    <ion-list-header style="margin-top: 15%;"><h2 style="text-align: center; width: 95%;"><i>¡Receta finalizada!</i></h2> </ion-list-header>
+    <div style="text-align: center;">
+      <span style="font-size: 30px;" *ngFor="let e of [].constructor(recipesService.selectedRecipe.valoracion)"><ion-icon name="star" color="warning"></ion-icon></span>
+      <span style="font-size: 30px;" *ngFor="let e of [].constructor(5 - recipesService.selectedRecipe.valoracion)"><ion-icon name="star" color="light"></ion-icon></span>
+    </div>
+    <div class="container" style="display: flex; flex-direction: column; justify-content: space-between; height: 15%; margin-top: 10%;" *ngIf="!userService.commented">
+      <div style="text-align: center;"><p>Deja tu comentario</p></div>
+      <div style="text-align: center;"><ion-button style="width: 150px;" size="medium" color="secondary" (click)="openModal()">Comentar</ion-button></div>
+    </div>
+    <div class="container" style="display: flex; flex-direction: column; justify-content: space-between; height: 15%; margin-top: 10%;" *ngIf="userService.commented">
+      <div style="text-align: center;"><ion-button size="medium" color="secondary" (click)="endGuide('comments')">Ver comentarios</ion-button></div>
+    </div>
+  </ng-template>
+  
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <div style="display: flex; justify-content: center; margin-bottom: 5%;">
+    <div style="margin: 5px auto;">
+      <ion-button *ngIf="section != 'steps'" expand="block" color="danger" (click)="manageSections('previous')">Volver</ion-button>
+      <ion-button *ngIf="section == 'steps'" expand="block" color="danger" (click)="manageSteps('previous')">Volver</ion-button>
+    </div>
+    <div style="margin: 5px auto;">
+      <ion-button *ngIf="section != 'steps'" expand="block" (click)="section == 'end' ? endGuide('recipe') : manageSections('continue')">{{section == 'start' ? 'Comenzar' : section == 'end' ? 'Finalizar' : 'Continuar'}}</ion-button>
+      <ion-button *ngIf="section == 'steps'" expand="block" (click)="manageSteps('continue')">Continuar</ion-button>
+    </div>
+  </div>
+</ion-footer>

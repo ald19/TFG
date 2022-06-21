@@ -51,6 +51,10 @@ const routes: Routes = [
       {
         path: 'add-comment',
         loadChildren: () => import('../../pages/add-comment/add-comment.module').then( m => m.AddCommentPageModule)
+      },
+      {
+        path: 'guide/:id_recipe',
+        loadChildren: () => import('../../pages/guide/guide.module').then( m => m.GuidePageModule)
       }
     ]
   }
