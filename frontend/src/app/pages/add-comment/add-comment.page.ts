@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/services/auth.service';
 import { NgForm } from '@angular/forms';
 import { UserService } from './../../services/user.service';
 import { ModalController, NavParams } from '@ionic/angular';
@@ -12,7 +13,7 @@ export class AddCommentPage implements OnInit {
 
   newComment: any;
 
-  constructor(public modalController: ModalController, public userService: UserService, private navParams: NavParams) {
+  constructor(public modalController: ModalController, public userService: UserService, private navParams: NavParams, private authService: AuthService) {
     this.newComment = {
       comentario: null,
       valoracion: 0
@@ -30,7 +31,7 @@ export class AddCommentPage implements OnInit {
   }
 
   addComment(form: NgForm){
-    this.userService.addComment(this.navParams.get('id_recipe'), '1', form.value)
+    this.userService.addComment(this.navParams.get('id_recipe'), this.authService.getLoggedUser(), form.value)
       .subscribe(() => {
         this.userService.commented = true;
         this.getComments();

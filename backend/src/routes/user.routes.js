@@ -2,6 +2,12 @@ const { Router } = require('express');
 const router = Router();
 
 const {
+    getUserInfo,
+    followUser,
+    unfollowUser,
+    getRecipesByUser,
+    getFollowers,
+    getFollowing,
     getFavList,
     setRecipeAsFav, 
     removeRecipeFromFav,
@@ -12,6 +18,12 @@ const {
     removeComment
 } = require('../controllers/user.controller');
 
+router.get('/perfil/:id_usuario/info', getUserInfo);
+router.post('/perfil/:id_usuario/:id_usuario2', followUser);
+router.get('/perfil/:id_usuario/:id_usuario2', unfollowUser);
+router.get('/perfil/:id_usuario/recetas', getRecipesByUser);
+router.get('/perfil/:id_usuario/seguidores', getFollowers);
+router.get('/perfil/:id_usuario/seguidos', getFollowing);
 router.get('/:id_usuario', getFavList);
 router.post('/:id_usuario', setRecipeAsFav);
 router.get('/:id_usuario/:id_receta', removeRecipeFromFav);

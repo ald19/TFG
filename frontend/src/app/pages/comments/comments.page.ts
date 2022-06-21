@@ -1,6 +1,7 @@
+import { AuthService } from 'src/app/services/auth.service';
 import { AddCommentPage } from './../add-comment/add-comment.page';
 import { ModalController } from '@ionic/angular';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { UserService } from './../../services/user.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -11,7 +12,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CommentsPage implements OnInit {
 
-  constructor(public userService: UserService, private route: ActivatedRoute, private modalController: ModalController, private router: Router) {}
+  constructor(public userService: UserService, private route: ActivatedRoute, private modalController: ModalController, public authService: AuthService) {}
 
   ionViewWillEnter(){
 		this.ngOnInit();
@@ -30,7 +31,7 @@ export class CommentsPage implements OnInit {
   }
 
   getComment(){
-    this.userService.getComment(this.route.snapshot.paramMap.get('id_recipe'), '1')
+    this.userService.getComment(this.route.snapshot.paramMap.get('id_recipe'), this.authService.getLoggedUser())
       .subscribe(resp => {
         const result = resp as any[];
         if(result.length)
@@ -41,7 +42,7 @@ export class CommentsPage implements OnInit {
   }
 
   removeComment(){
-    this.userService.removeComment(this.route.snapshot.paramMap.get('id_recipe'), '1')
+    this.userService.removeComment(this.route.snapshot.paramMap.get('id_recipe'), this.authService.getLoggedUser())
       .subscribe(() => {
         this.userService.commented = false;
         this.getComments();
