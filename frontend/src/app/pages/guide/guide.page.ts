@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from './../../services/user.service';
 import { AddCommentPage } from './../add-comment/add-comment.page';
 import { ModalController } from '@ionic/angular';
@@ -23,7 +24,8 @@ export class GuidePage implements OnInit {
     private sanitizer: DomSanitizer, 
     private modalController: ModalController,
     public userService: UserService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.section = 'start';
     this.step = 0;
@@ -36,7 +38,7 @@ export class GuidePage implements OnInit {
   }
 
   getRecipe(){
-		this.recipesService.getRecipe(this.route.snapshot.paramMap.get('id_recipe'), 1)
+		this.recipesService.getRecipe(this.route.snapshot.paramMap.get('id_recipe'), this.authService.getLoggedUser())
 		.subscribe(res => {
 			this.recipesService.selectedRecipe = res as Recipe;
 			this.getImages();
@@ -116,7 +118,7 @@ export class GuidePage implements OnInit {
   }
 
   getComment(){
-    this.userService.getComment(this.route.snapshot.paramMap.get('id_recipe'), '1')
+    this.userService.getComment(this.route.snapshot.paramMap.get('id_recipe'), this.authService.getLoggedUser())
       .subscribe(resp => {
         const result = resp as any[];
         if(result.length)

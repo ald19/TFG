@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/services/auth.service';
 import { Observable } from 'rxjs';
 import { UserService } from './../../services/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -21,7 +22,7 @@ export class SearchPage implements OnInit {
   recipes: Observable<Recipe[]>;
 
   constructor(
-    public recipesService: RecipesService, public userService: UserService) {
+    public recipesService: RecipesService, public userService: UserService, private authService: AuthService) {
     this.segment = "name";
     this.selectedFood = [];
     this.name = "";
@@ -41,10 +42,10 @@ export class SearchPage implements OnInit {
 
   manageOptions(){
     if(this.name){
-      this.recipesService.getRecipesByName(this.name, '1')
+      this.recipesService.getRecipesByName(this.name, this.authService.getLoggedUser())
       .subscribe(resp => this.setRecipes(resp));
     } else{
-      this.recipesService.getRecipesByFood(this.selectedFood, '1')
+      this.recipesService.getRecipesByFood(this.selectedFood, this.authService.getLoggedUser())
       .subscribe(resp => this.setRecipes(resp));
     }
   }
@@ -63,7 +64,7 @@ export class SearchPage implements OnInit {
     this.recipesService.getImages(result);
     this.recipesService.setRecipes$(result, 'search');
     
-    this.recipesService.getRecipes('fecha_publicacion', '1')
+    this.recipesService.getRecipes('fecha_publicacion', this.authService.getLoggedUser())
     .subscribe(res => {
       const result2 = res as Recipe[];
       this.recipesService.getImages(result2);
@@ -78,17 +79,17 @@ export class SearchPage implements OnInit {
   }
 
   setFav(id_receta: number){
-		this.userService.setFav('1', id_receta)
+		this.userService.setFav(this.authService.getLoggedUser(), id_receta)
 			.subscribe(() => this.manageOptions());
 	}
 
 	removeFav(id_receta: number){
-		this.userService.removeFav('1', id_receta.toString())
+		this.userService.removeFav(this.authService.getLoggedUser(), id_receta.toString())
 			.subscribe(() => this.manageOptions());
 	}
 
 	checkFav(id_receta: number){
-		this.userService.checkFav('1', id_receta.toString())
+		this.userService.checkFav(this.authService.getLoggedUser(), id_receta.toString())
 			.subscribe(resp => {
 				const result = resp as Recipe[];
 				if(!result.length)

@@ -2,6 +2,95 @@ const dotenv = require('dotenv');
 dotenv.config({path: '.env'});
 const connection = require('../db/database');
 
+async function getUserInfo(req, res){
+    const {id_usuario} = req.params;
+    const sql = `
+        SELECT id, nickname, (SELECT COUNT(*) FROM seguimientos s LEFT JOIN usuarios u ON s.id_usuario1 = u.id WHERE s.id_usuario2 = ${id_usuario}) as seguidores,
+        (SELECT COUNT(*) FROM seguimientos s LEFT JOIN usuarios u ON s.id_usuario2 = u.id WHERE s.id_usuario1 = ${id_usuario}) as seguidos,
+        (SELECT COUNT(*) FROM recetas r LEFT JOIN usuarios u ON r.id_usuario = u.id WHERE r.id_usuario = ${id_usuario}) as publicaciones
+        FROM usuarios
+        WHERE id = ${id_usuario}
+    `;
+
+    await connection.query(sql, async(err, results) => {
+        if(err)
+            console.log(err);
+        else
+            res.status(200).json(results);
+    });
+}
+
+async function getRecipesByUser(req, res){
+    const {id_usuario} = req.params;
+    const sql = `
+        SELECT r.*, u.nickname, CASE WHEN r.id IN (SELECT id_receta FROM recetas_favoritas WHERE id_usuario = ${id_usuario}) THEN TRUE else FALSE END as fav,
+        (SELECT COUNT(*) FROM recetas_favoritas WHERE id_receta = r.id) as me_gusta
+        FROM recetas r 
+        LEFT JOIN usuarios u ON r.id_usuario = u.id 
+        WHERE r.id_usuario = ${id_usuario}
+        ORDER BY fecha_publicacion DESC
+    `;
+
+    await connection.query(sql, async(err, results) => {
+        if(err)
+            console.log(err);
+        else
+            res.status(200).json(results);
+    });
+}
+
+async function getFollowers(req, res){
+    const {id_usuario} = req.params;
+    const sql = 'SELECT u.id, u.nickname FROM seguimientos s LEFT JOIN usuarios u ON s.id_usuario1 = u.id WHERE s.id_usuario2 = ?';
+
+    await connection.query(sql, [id_usuario], async(err, results) => {
+        if(err)
+            console.log(err);
+        else
+            res.status(200).json(results);
+    });
+}
+
+async function getFollowing(req, res){
+    const {id_usuario} = req.params;
+    const sql = 'SELECT u.id, u.nickname FROM seguimientos s LEFT JOIN usuarios u ON s.id_usuario2 = u.id WHERE s.id_usuario1 = ?';
+
+    await connection.query(sql, [id_usuario], async(err, results) => {
+        if(err)
+            console.log(err);
+        else
+            res.status(200).json(results);
+    });
+}
+
+async function followUser(req, res){
+    const {id_usuario, id_usuario2} = req.params;
+    const sql = 'INSERT INTO seguimientos SET ?';
+    const body = {
+        id_usuario1: id_usuario,
+        id_usuario2: id_usuario2
+    }
+
+    await connection.query(sql, [body], async(err, results) => {
+        if(err)
+            console.log(err);
+        else
+            res.status(200).json({msg: 'Se ha seguido correctamente'});
+    });
+}
+
+async function unfollowUser(req, res){
+    const {id_usuario, id_usuario2} = req.params;
+    const sql = 'DELETE FROM seguimientos WHERE id_usuario1 = ' + id_usuario + ' AND id_usuario2 = ' + id_usuario2;
+
+    await connection.query(sql, async(err, results) => {
+        if(err)
+            console.log(err);
+        else
+            res.status(200).json({msg: 'Se ha dejado de seguir correctamente'});
+    });
+}
+
 async function getFavList(req, res){
     const {id_usuario} = req.params;
     const sql = `
@@ -143,6 +232,12 @@ async function updateRecipeRate(id_receta, res){
 } 
 
 module.exports = {
+    getUserInfo,
+    followUser,
+    unfollowUser,
+    getRecipesByUser,
+    getFollowers,
+    getFollowing,
     getFavList,
     setRecipeAsFav,
     removeRecipeFromFav,

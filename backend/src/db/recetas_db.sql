@@ -69,5 +69,5 @@ CREATE TABLE IF NOT EXISTS seguimientos (
     id_usuario2 INT(6) NOT NULL,
     PRIMARY KEY (id_usuario1, id_usuario2),
     FOREIGN KEY (id_usuario1) REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_usuario2) REFERENCES recetas(id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (id_usuario2) REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE CASCADE
 )

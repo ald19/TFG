@@ -29,8 +29,16 @@ export class AuthService {
     }
   }
 
+  getLoggedUser(){
+    if(this.loggedIn())
+      return localStorage.getItem('id');
+    else  
+      return null;
+  }
+
   logOut(){
     localStorage.removeItem('token');
+    localStorage.removeItem('id');
     this.router.navigate(['/']);
   }
 }

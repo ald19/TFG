@@ -39,7 +39,7 @@ async function login(req, res) {
                     expiresIn: 60 * 60 * 24
                 });
                 
-                res.status(200).header('Authorization', token).json({token: token, msg: 'Login completado'});
+                res.status(200).header('Authorization', token).json({token: token, id: results[0].id, msg: 'Login completado'});
             }
         });
     }

@@ -1,5 +1,5 @@
+import { AuthService } from 'src/app/services/auth.service';
 import { Observable } from 'rxjs';
-import { DomSanitizer } from '@angular/platform-browser';
 import { RecipesService } from 'src/app/services/recipes.service';
 import { Recipe } from './../../models/recipe';
 import { UserService } from './../../services/user.service';
@@ -14,7 +14,7 @@ export class FavsPage implements OnInit {
 
   recipes: Observable<Recipe[]>;
 
-  constructor(public userService: UserService, public recipesService: RecipesService, private sanitizer: DomSanitizer) {
+  constructor(public userService: UserService, public recipesService: RecipesService, private authService: AuthService) {
     this.recipes = userService.favRecipes$;
   }
 
@@ -34,7 +34,7 @@ export class FavsPage implements OnInit {
   }
 
   getRecipes(){
-  this.recipesService.getRecipes('fecha_publicacion', '1')
+  this.recipesService.getRecipes('fecha_publicacion', this.authService.getLoggedUser())
   .subscribe(res => {
     const result = res as Recipe[];
     this.recipesService.getImages(result);
@@ -45,7 +45,7 @@ export class FavsPage implements OnInit {
 	}
 
   removeFav(id_receta: string){
-    this.userService.removeFav('1', id_receta)
+    this.userService.removeFav(this.authService.getLoggedUser(), id_receta)
       .subscribe(() => this.getRecipes());
   }
 

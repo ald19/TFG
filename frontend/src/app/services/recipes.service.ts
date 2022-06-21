@@ -50,7 +50,7 @@ export class RecipesService {
       this.recipesSearch$.next(recipes);
   }
 
-  getRecipe(id: string, id_user: number){
+  getRecipe(id: string, id_user: string){
     return this.http.get(this.URL + `/receta/${id}/${id_user}`);
   }
 

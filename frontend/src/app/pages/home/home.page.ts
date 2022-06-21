@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { UserService } from './../../services/user.service';
@@ -16,7 +17,7 @@ export class HomePage implements OnInit {
 	recipes: Observable<Recipe[]>;
 	comments: number[];
 
-	constructor(public recipesService: RecipesService, public userService: UserService, private router: Router) {
+	constructor(public recipesService: RecipesService, public userService: UserService, private router: Router, private authService: AuthService) {
 		this.recipes = recipesService.recipes$;
 		this.segment = "fecha_publicacion";
 		this.check = false;
@@ -32,7 +33,7 @@ export class HomePage implements OnInit {
 	}
 
 	getRecipes(){
-		this.recipesService.getRecipes(this.segment, '1')
+		this.recipesService.getRecipes(this.segment, this.authService.getLoggedUser())
 		.subscribe(res => {
 			const result = res as Recipe[];
 			this.recipesService.getImages(result);
@@ -43,17 +44,17 @@ export class HomePage implements OnInit {
 	}
 
 	setFav(id_receta: number){
-		this.userService.setFav('1', id_receta)
+		this.userService.setFav(this.authService.getLoggedUser(), id_receta)
 			.subscribe(() => this.getRecipes());
 	}
 
 	removeFav(id_receta: number){
-		this.userService.removeFav('1', id_receta.toString())
+		this.userService.removeFav(this.authService.getLoggedUser(), id_receta.toString())
 			.subscribe(() => this.getRecipes());
 	}
 
 	checkFav(id_receta: number){
-		this.userService.checkFav('1', id_receta.toString())
+		this.userService.checkFav(this.authService.getLoggedUser(), id_receta.toString())
 			.subscribe(resp => {
 				const result = resp as Recipe[];
 				if(!result.length)

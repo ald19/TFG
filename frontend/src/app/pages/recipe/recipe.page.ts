@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from './../../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,7 +19,8 @@ export class RecipePage implements OnInit {
 		private route: ActivatedRoute, 
 		private sanitizer: DomSanitizer, 
 		private userService: UserService,
-		private router: Router
+		private router: Router,
+		private authService: AuthService
 	) { }
 
 	ionViewWillEnter(){
@@ -32,7 +34,7 @@ export class RecipePage implements OnInit {
 	}
 
 	getRecipe(){
-		this.recipesService.getRecipe(this.route.snapshot.paramMap.get('id'), 1)
+		this.recipesService.getRecipe(this.route.snapshot.paramMap.get('id'), this.authService.getLoggedUser())
 		.subscribe(res => {
 			this.recipesService.selectedRecipe = res as Recipe;
 			this.getImages();
@@ -66,7 +68,7 @@ export class RecipePage implements OnInit {
 	}
 
 	updateFavs(){
-		this.recipesService.getRecipes('fecha_publicacion', '1')
+		this.recipesService.getRecipes('fecha_publicacion', this.authService.getLoggedUser())
 		.subscribe(res => {
 			const result = res as Recipe[];
 			this.recipesService.getImages(result);
@@ -77,17 +79,17 @@ export class RecipePage implements OnInit {
 	}
 
 	setFav(id_receta: number){
-		this.userService.setFav('1', id_receta)
+		this.userService.setFav(this.authService.getLoggedUser(), id_receta)
 			.subscribe(() => this.getRecipe());
 	}
 
 	removeFav(id_receta: number){
-		this.userService.removeFav('1', id_receta.toString())
+		this.userService.removeFav(this.authService.getLoggedUser(), id_receta.toString())
 			.subscribe(() => this.getRecipe());
 	}
 
 	checkFav(id_receta: number){
-		this.userService.checkFav('1', id_receta.toString())
+		this.userService.checkFav(this.authService.getLoggedUser(), id_receta.toString())
 			.subscribe(resp => {
 				const result = resp as Recipe[];
 				if(!result.length)
