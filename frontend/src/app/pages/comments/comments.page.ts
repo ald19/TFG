@@ -49,7 +49,7 @@ export class CommentsPage implements OnInit {
   }
 
   back(){
-		this.router.navigate([`/tabs/recipe/${this.route.snapshot.paramMap.get('id_recipe')}`]);
+    window.history.back();
 	}
 
   async openModal(){

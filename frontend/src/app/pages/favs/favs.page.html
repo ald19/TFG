@@ -5,8 +5,8 @@
 </ion-header>
 
 <ion-content>
-		<ion-list-header ><h2 style="text-align: center; width: 95%;"><i>Recetas favoritas</i></h2> </ion-list-header>
-  <ion-list *ngFor="let recipe of recipes | async; let i = index">
+	<ion-list-header ><h2 style="text-align: center; width: 95%;"><i>Recetas favoritas</i></h2> </ion-list-header>
+ 	<ion-list *ngFor="let recipe of recipes | async; let i = index">
 		<ion-item lines="none">
 			<ion-avatar slot="start">
 				<img src="https://icon-library.com/images/avatar-icon-images/avatar-icon-images-4.jpg">
@@ -38,8 +38,8 @@
 				<ion-row>
 					<ion-col size="8">
 						<ion-label>
-							<h2>{{recipe.valoracion}} Me gusta</h2>
-							<p><i>8 Comentarios</i></p>
+							<h2>{{recipe.me_gusta}} Me gusta</h2>
+							<p [routerLink]="['/tabs/comments', recipe.id]"><i>Ver Comentarios</i></p>
 							<p>{{recipe.fecha_publicacion | date: 'dd-MM-YYYY'}}</p>
 						</ion-label>
 					</ion-col>
