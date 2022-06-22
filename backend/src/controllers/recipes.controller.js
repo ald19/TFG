@@ -151,7 +151,8 @@ async function getRecipeByFood(req, res){
             let recipes = await checkRecipeContainsFood(alimentos, results);
             if(recipes.length){
                 const sql2 = `
-                    SELECT r.*, u.nickname, CASE WHEN r.id IN (SELECT id_receta FROM recetas_favoritas WHERE id_usuario = ${id_usuario}) THEN TRUE else FALSE END as fav 
+                    SELECT r.*, u.nickname, CASE WHEN r.id IN (SELECT id_receta FROM recetas_favoritas WHERE id_usuario = ${id_usuario}) THEN TRUE else FALSE END as fav,
+                    (SELECT COUNT(*) FROM recetas_favoritas WHERE id_receta = r.id) as me_gusta 
                     FROM recetas r 
                     LEFT JOIN usuarios u ON r.id_usuario = u.id
                     WHERE r.id IN (?) 
@@ -176,7 +177,8 @@ async function getRecipeByName(req, res){
     const {nombre} = req.query;
     
     const sql = `
-        SELECT r.*, u.nickname, CASE WHEN r.id IN (SELECT id_receta FROM recetas_favoritas WHERE id_usuario = ${id_usuario}) THEN TRUE else FALSE END as fav
+        SELECT r.*, u.nickname, CASE WHEN r.id IN (SELECT id_receta FROM recetas_favoritas WHERE id_usuario = ${id_usuario}) THEN TRUE else FALSE END as fav,
+        (SELECT COUNT(*) FROM recetas_favoritas WHERE id_receta = r.id) as me_gusta
         FROM recetas r
         LEFT JOIN usuarios u ON r.id_usuario = u.id
         WHERE r.nombre LIKE '%${nombre}%'

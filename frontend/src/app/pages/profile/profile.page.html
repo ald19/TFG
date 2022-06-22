@@ -1,0 +1,94 @@
+<ion-header>
+  <ion-toolbar class="toolbar-color">
+    <ion-title class="ion-text-start">CookItEasy</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-row>
+          <ion-col>
+            <ion-avatar>
+              <img src="https://icon-library.com/images/avatar-icon-images/avatar-icon-images-4.jpg">
+            </ion-avatar>
+          </ion-col>
+          <ion-col style="display: flex; flex-direction: column; justify-content: center;">
+            <div style="text-align: center;">{{info.publicaciones}}</div>
+            <div style="text-align: center;">Publicaciones</div>
+          </ion-col>
+          <ion-col style="display: flex; flex-direction: column; justify-content: center;">
+            <div style="text-align: center;">{{info.seguidores}}</div>
+            <div style="text-align: center;">Seguidores</div>
+          </ion-col>
+          <ion-col style="display: flex; flex-direction: column; justify-content: center;">
+            <div style="text-align: center;">{{info.seguidos}}</div>
+            <div style="text-align: center;">Siguiendo</div>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row style="display: flex; justify-content: space-between;">
+      <ion-col size="4" style="margin-left: 2%;">
+        <span>{{info.nickname}}</span>
+      </ion-col>
+    </ion-row>
+    <ion-row style="border-bottom: 1px solid #eee;">
+      <ion-col *ngIf="info.id == authService.getLoggedUser() && authService.loggedIn()" style="display: flex; justify-content: space-between;">
+        <div>
+          <ion-button [routerLink]="['/tabs/update-profile']" expand="block">Editar perfil</ion-button>
+        </div>
+        <div>
+          <ion-button expand="block" color="dark" (click)="logOut()">Desconectar</ion-button>
+        </div>
+      </ion-col>
+      <ion-col *ngIf="info.id != authService.getLoggedUser() && authService.loggedIn()">
+        <ion-button *ngIf="!following" expand="block" (click)="followUser()">Seguir</ion-button>
+        <ion-button *ngIf="following" color="danger" expand="block" (click)="unfollowUser()">Dejar de seguir</ion-button>
+      </ion-col>
+    </ion-row>
+    
+    <ion-row *ngFor="let recipe of recipes | async; let i = index" style="margin-top: 10px; border-bottom: 1px solid #eee;">
+      <ion-col>
+        <ion-row [routerLink]="['/tabs/recipe', recipe.id]">
+          <ion-col *ngIf="recipe.imagenes">
+            <div>
+              <img style="max-width:100%; max-height:100%;" [src]="recipe.imagenes[0]" class="thumb-img" imageViewer />
+            </div>
+          </ion-col>
+          <ion-col *ngIf="!recipe.imagenes">
+            <div [routerLink]="['/tabs/recipe', recipe.id]">
+              <img style="max-width:100%; max-height:100%;" src="../../../assets/recipe/plato-blanco-vacio_74190-1719.webp" class="thumb-img" imageViewer />
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <ion-label text-wrap>
+              <h3>{{recipe.nombre}}</h3>
+            </ion-label>
+            <ion-label>
+              <p style="overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 3;
+                      line-clamp: 3; 
+              -webkit-box-orient: vertical;"><i>{{recipe.descripcion}}</i></p>
+              <h3>{{recipe.me_gusta}} Me gusta</h3>
+              <span style="font-size: 14px;" *ngFor="let e of [].constructor(recipe.valoracion)"><ion-icon name="star" color="warning"></ion-icon></span>
+            </ion-label>
+          </ion-col>
+          <ion-col size="2">
+            <ion-label>
+              <p>{{recipe.duracion}}</p>
+            </ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="info.id == authService.getLoggedUser()">
+          <ion-col>
+            <div style="float: right;"><ion-button size="small" color="danger" (click)="showAlert(recipe.id)">Eliminar</ion-button></div>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

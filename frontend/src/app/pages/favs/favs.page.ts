@@ -14,7 +14,7 @@ export class FavsPage implements OnInit {
 
   recipes: Observable<Recipe[]>;
 
-  constructor(public userService: UserService, public recipesService: RecipesService, private authService: AuthService) {
+  constructor(public userService: UserService, public recipesService: RecipesService, public authService: AuthService) {
     this.recipes = userService.favRecipes$;
   }
 
@@ -48,5 +48,13 @@ export class FavsPage implements OnInit {
     this.userService.removeFav(this.authService.getLoggedUser(), id_receta)
       .subscribe(() => this.getRecipes());
   }
+
+  doRefresh(event: any) {
+		this.ngOnInit();
+
+		setTimeout(() => {
+		  event.target.complete();
+		}, 2000);
+	}
 
 }

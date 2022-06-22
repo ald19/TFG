@@ -33,11 +33,12 @@ export class RegisterPage implements OnInit {
     } else{
       this.authService.register(form.value)
       .subscribe(
-        res => {
+        () => {
+          form.reset();
           this.router.navigate(['/login']);
         },
         err => {
-          this.showAlert(err.error)
+          this.showAlert(err.error.msg)
           form.reset();
         });
     }

@@ -1,11 +1,12 @@
 const dotenv = require('dotenv');
 dotenv.config({path: '.env'});
 const connection = require('../db/database');
+const { encryptPassword, validatePassword } = require('./methods');
 
 async function getUserInfo(req, res){
     const {id_usuario} = req.params;
     const sql = `
-        SELECT id, nickname, (SELECT COUNT(*) FROM seguimientos s LEFT JOIN usuarios u ON s.id_usuario1 = u.id WHERE s.id_usuario2 = ${id_usuario}) as seguidores,
+        SELECT id, nombre, nickname, email, fecha_nacimiento, (SELECT COUNT(*) FROM seguimientos s LEFT JOIN usuarios u ON s.id_usuario1 = u.id WHERE s.id_usuario2 = ${id_usuario}) as seguidores,
         (SELECT COUNT(*) FROM seguimientos s LEFT JOIN usuarios u ON s.id_usuario2 = u.id WHERE s.id_usuario1 = ${id_usuario}) as seguidos,
         (SELECT COUNT(*) FROM recetas r LEFT JOIN usuarios u ON r.id_usuario = u.id WHERE r.id_usuario = ${id_usuario}) as publicaciones
         FROM usuarios
@@ -16,7 +17,7 @@ async function getUserInfo(req, res){
         if(err)
             console.log(err);
         else
-            res.status(200).json(results);
+            res.status(200).json(results[0]);
     });
 }
 
@@ -48,6 +49,23 @@ async function getFollowers(req, res){
             console.log(err);
         else
             res.status(200).json(results);
+    });
+}
+
+async function getIsFollowing(req, res){
+    const {id_usuario, id_usuario2} = req.params;
+    const sql = `SELECT * FROM seguimientos WHERE id_usuario1 = ${id_usuario} AND id_usuario2 = ${id_usuario2}`;
+
+    await connection.query(sql, async(err, results) => {
+        if(err)
+            console.log(err);
+        else{
+            if(results.length)
+                res.status(200).json({following: true});
+            else    
+                res.status(200).json({following: false});
+            
+        }
     });
 }
 
@@ -88,6 +106,49 @@ async function unfollowUser(req, res){
             console.log(err);
         else
             res.status(200).json({msg: 'Se ha dejado de seguir correctamente'});
+    });
+}
+
+async function updateProfile(req, res){
+    const {id_usuario} = req.body;
+    const sql = 'SELECT * FROM usuarios WHERE id = ?';
+
+    await connection.query(sql, [id_usuario], async(err, results) => {
+        if(err)
+            console.log(err);
+        else{
+            const sql2 = 'UPDATE usuarios SET ? WHERE id = ' + id_usuario;
+            let body = req.body;
+
+            if(req.body.password){
+                body = {
+                    ...body,
+                    contraseña: await encryptPassword(req.body.newPassword)
+                }
+                delete body['password'];
+                delete body['newPassword'];
+                delete body['id_usuario'];
+
+                if(await validatePassword(req.body.password, results[0].contraseña)){
+                    await connection.query(sql2, [body], async(err, results) => {
+                        if(err)
+                            console.log(err);
+                        else
+                            res.status(200).json({msg: 'Se ha actualizado la información del usuario correctamente'});
+                    });
+                } else{
+                    res.status(400).json({msg: 'La contraseña no es correcta'});
+                }
+            } else {
+                delete body['id_usuario'];
+                await connection.query(sql2, [body], async(err, results) => {
+                    if(err)
+                        res.status(400).json({msg: 'Faltan campos o son erroneos'});
+                    else
+                        res.status(200).json({msg: 'Se ha actualizado la información del usuario correctamente'});
+                });
+            }
+        }
     });
 }
 
@@ -216,18 +277,18 @@ async function removeComment(req, res){
 
 async function updateRecipeRate(id_receta, res){
     const sql2 = `
-    UPDATE recetas SET valoracion = (
-        SELECT ROUND(AVG(valoracion)) as valoracion
-        FROM comentarios
-        WHERE id_receta = ${id_receta}
-    )
-    WHERE id = ${id_receta}`;
+        UPDATE recetas SET valoracion = (
+            SELECT ROUND(AVG(valoracion)) as valoracion
+            FROM comentarios
+            WHERE id_receta = ${id_receta}
+        )
+        WHERE id = ${id_receta}
+    `;
     await connection.query(sql2, async(err, results) => {
-        if(err){
+        if(err)
             console.log(err);
-        } else{
+        else
             res.status(200).json({msg: 'Se ha actualizado la valoración de la receta correctamente'});
-        }
     });
 } 
 
@@ -238,6 +299,8 @@ module.exports = {
     getRecipesByUser,
     getFollowers,
     getFollowing,
+    getIsFollowing,
+    updateProfile,
     getFavList,
     setRecipeAsFav,
     removeRecipeFromFav,

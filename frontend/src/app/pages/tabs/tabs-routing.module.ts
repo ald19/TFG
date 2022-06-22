@@ -1,3 +1,4 @@
+import { AuthGuard } from './../../shared/guards/auth.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -22,15 +23,18 @@ const routes: Routes = [
       },
       {
         path: 'new-recipe',
-        loadChildren: () => import('../../pages/new-recipe/new-recipe.module').then( m => m.NewRecipePageModule)
+        loadChildren: () => import('../../pages/new-recipe/new-recipe.module').then( m => m.NewRecipePageModule),
+        canActivate: [AuthGuard]
       },
       {
         path: 'add-food',
-        loadChildren: () => import('../../pages/add-food/add-food.module').then( m => m.AddFoodPageModule)
+        loadChildren: () => import('../../pages/add-food/add-food.module').then( m => m.AddFoodPageModule),
+        canActivate: [AuthGuard]
       },
       {
         path: 'add-food-modal',
-        loadChildren: () => import('../../pages/add-food-modal/add-food-modal.module').then( m => m.AddFoodModalPageModule)
+        loadChildren: () => import('../../pages/add-food-modal/add-food-modal.module').then( m => m.AddFoodModalPageModule),
+        canActivate: [AuthGuard]
       },
       {
         path: 'recipe-steps',
@@ -50,11 +54,26 @@ const routes: Routes = [
       },
       {
         path: 'add-comment',
-        loadChildren: () => import('../../pages/add-comment/add-comment.module').then( m => m.AddCommentPageModule)
+        loadChildren: () => import('../../pages/add-comment/add-comment.module').then( m => m.AddCommentPageModule),
+        canActivate: [AuthGuard]
       },
       {
         path: 'guide/:id_recipe',
         loadChildren: () => import('../../pages/guide/guide.module').then( m => m.GuidePageModule)
+      },
+      {
+        path: 'main-profile',
+        loadChildren: () => import('../../pages/profile/profile.module').then( m => m.ProfilePageModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'update-profile',
+        loadChildren: () => import('../../pages/update-profile/update-profile.module').then( m => m.UpdateProfilePageModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'profile/:id_user',
+        loadChildren: () => import('../../pages/profile/profile.module').then( m => m.ProfilePageModule)
       }
     ]
   }

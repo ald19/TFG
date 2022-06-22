@@ -8,6 +8,8 @@ const {
     getRecipesByUser,
     getFollowers,
     getFollowing,
+    getIsFollowing,
+    updateProfile,
     getFavList,
     setRecipeAsFav, 
     removeRecipeFromFav,
@@ -21,9 +23,11 @@ const {
 router.get('/perfil/:id_usuario/info', getUserInfo);
 router.post('/perfil/:id_usuario/:id_usuario2', followUser);
 router.get('/perfil/:id_usuario/:id_usuario2', unfollowUser);
-router.get('/perfil/:id_usuario/recetas', getRecipesByUser);
+router.get('/perfil/:id_usuario/siguiendo/:id_usuario2', getIsFollowing);
+router.get('/perfil/:id_usuario/recetas/all', getRecipesByUser);
 router.get('/perfil/:id_usuario/seguidores', getFollowers);
 router.get('/perfil/:id_usuario/seguidos', getFollowing);
+router.post('/perfil/actualizar', updateProfile);
 router.get('/:id_usuario', getFavList);
 router.post('/:id_usuario', setRecipeAsFav);
 router.get('/:id_usuario/:id_receta', removeRecipeFromFav);

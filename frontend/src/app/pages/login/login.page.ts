@@ -29,10 +29,11 @@ export class LoginPage implements OnInit {
         res => {
           localStorage.setItem('token', res.token);
           localStorage.setItem('id', res.id);
+          form.reset();
           this.router.navigate(['/']);
         },
         err => {
-          this.showAlert(err.error)
+          this.showAlert(err.error.msg)
           form.reset();
         });
   }

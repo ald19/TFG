@@ -9,15 +9,19 @@
       		<ion-icon name="search"></ion-icon>
     	</ion-tab-button>
 
-		<ion-tab-button tab="new-recipe">
+		<ion-tab-button tab="new-recipe" *ngIf="authService.loggedIn()">
 			<ion-icon name="add-circle-outline"></ion-icon>
 		</ion-tab-button>
 
-		<ion-tab-button tab="favs">
+		<ion-tab-button tab="favs" *ngIf="authService.loggedIn()">
 			<ion-icon name="receipt-outline"></ion-icon>
 		</ion-tab-button>
 
-		<ion-tab-button tab="profile">
+		<ion-tab-button tab="main-profile" *ngIf="authService.loggedIn()">
+			<ion-icon name="person"></ion-icon>
+		</ion-tab-button>
+
+		<ion-tab-button [routerLink]="['/login']" *ngIf="!authService.loggedIn()">
 			<ion-icon name="person"></ion-icon>
 		</ion-tab-button>
     
