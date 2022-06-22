@@ -42,6 +42,10 @@ export class UserService {
     return this.http.get(this.URL + `/perfil/${id_user}/siguiendo/${id_user2}`);
   }
 
+  updateProfile(info: any){
+    return this.http.post(this.URL + `/perfil/actualizar`, info);
+  }
+
   getFavs(id: string){
     return this.http.get(this.URL + `/${id}`);
   }

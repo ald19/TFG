@@ -75,11 +75,11 @@
       <span style="font-size: 30px;" *ngFor="let e of [].constructor(recipesService.selectedRecipe.valoracion)"><ion-icon name="star" color="warning"></ion-icon></span>
       <span style="font-size: 30px;" *ngFor="let e of [].constructor(5 - recipesService.selectedRecipe.valoracion)"><ion-icon name="star" color="light"></ion-icon></span>
     </div>
-    <div class="container" style="display: flex; flex-direction: column; justify-content: space-between; height: 15%; margin-top: 10%;" *ngIf="!userService.commented && authService.getLoggedUser()">
+    <div class="container" style="display: flex; flex-direction: column; justify-content: space-between; height: 15%; margin-top: 10%;" *ngIf="!userService.commented && authService.loggedIn()">
       <div style="text-align: center;"><p>Deja tu comentario</p></div>
       <div style="text-align: center;"><ion-button style="width: 150px;" size="medium" color="secondary" (click)="openModal()">Comentar</ion-button></div>
     </div>
-    <div class="container" style="display: flex; flex-direction: column; justify-content: space-between; height: 15%; margin-top: 10%;" *ngIf="userService.commented">
+    <div class="container" style="display: flex; flex-direction: column; justify-content: space-between; height: 15%; margin-top: 10%;" *ngIf="userService.commented || !authService.loggedIn()">
       <div style="text-align: center;"><ion-button size="medium" color="secondary" (click)="endGuide('comments')">Ver comentarios</ion-button></div>
     </div>
   </ng-template>

@@ -35,15 +35,15 @@
       </ion-col>
     </ion-row>
     <ion-row style="border-bottom: 1px solid #eee;">
-      <ion-col *ngIf="info.id == authService.getLoggedUser() && authService.getLoggedUser()" style="display: flex; justify-content: space-between;">
+      <ion-col *ngIf="info.id == authService.getLoggedUser() && authService.loggedIn()" style="display: flex; justify-content: space-between;">
         <div>
-          <ion-button expand="block">Editar perfil</ion-button>
+          <ion-button [routerLink]="['/tabs/update-profile']" expand="block">Editar perfil</ion-button>
         </div>
         <div>
           <ion-button expand="block" color="dark" (click)="logOut()">Desconectar</ion-button>
         </div>
       </ion-col>
-      <ion-col *ngIf="info.id != authService.getLoggedUser() && authService.getLoggedUser()">
+      <ion-col *ngIf="info.id != authService.getLoggedUser() && authService.loggedIn()">
         <ion-button *ngIf="!following" expand="block" (click)="followUser()">Seguir</ion-button>
         <ion-button *ngIf="following" color="danger" expand="block" (click)="unfollowUser()">Dejar de seguir</ion-button>
       </ion-col>
@@ -51,9 +51,9 @@
     
     <ion-row *ngFor="let recipe of recipes | async; let i = index" style="margin-top: 10px; border-bottom: 1px solid #eee;">
       <ion-col>
-        <ion-row>
+        <ion-row [routerLink]="['/tabs/recipe', recipe.id]">
           <ion-col *ngIf="recipe.imagenes">
-            <div [routerLink]="['/tabs/recipe', recipe.id]">
+            <div>
               <img style="max-width:100%; max-height:100%;" [src]="recipe.imagenes[0]" class="thumb-img" imageViewer />
             </div>
           </ion-col>
