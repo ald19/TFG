@@ -55,23 +55,21 @@
         <ion-list *ngFor="let recipe of recipes | async; let i = index">
           <ion-item lines="none">
             <ion-avatar slot="start">
-              <img src="https://icon-library.com/images/avatar-icon-images/avatar-icon-images-4.jpg">
+              <img src="../../../assets/login/logo.jpg">
             </ion-avatar>
             <ion-label>
               <h3 [routerLink]="['/tabs/profile', recipe.id_usuario]">{{recipe.nickname}}</h3>
-              <p>{{recipe.nombre}}</p>
+              <p>{{recipe.nombre}} - {{recipe.duracion}}min</p>
             </ion-label>
             <span style="font-size: 14px;" *ngFor="let e of [].constructor(recipe.valoracion)"><ion-icon name="star" color="warning"></ion-icon></span>
           </ion-item>
 
           <ion-item lines="none" style="height: auto; padding-left: 0;">
-            <div *ngIf="recipe.imagenes">
-              <ion-slides centeredSlides="true" zoom="true" slidesPerView="1" pager="true">
-                <ion-slide  *ngFor="let img of recipe.imagenes">
-                  <img style="max-width:100%; text-align: center; max-height:100%;"  [src]="img" class="thumb-img" imageViewer />
-                </ion-slide>
-              </ion-slides>
-            </div>
+            <ion-slides centeredSlides="true" zoom="true" slidesPerView="1" pager="true" *ngIf="recipe.imagenes">
+              <ion-slide  *ngFor="let img of recipe.imagenes">
+                <img style="max-width:100%; text-align: center; max-height:100%;"  [src]="img" class="thumb-img" imageViewer />
+              </ion-slide>
+            </ion-slides>
             <div *ngIf="!recipe.imagenes">
               <img style="max-width:100%; text-align: center; max-height:100%;" src="../../../assets/recipe/plato-blanco-vacio_74190-1719.webp" class="thumb-img" imageViewer />
             </div>
