@@ -24,10 +24,12 @@ export class NewRecipePage implements OnInit {
 				this.recipesService.selectedRecipe.id_usuario = Number(this.authService.getLoggedUser());
 				this.recipesService.selectedRecipe.id = resp['id_recipe'];
 				this.recipesService.selectedRecipe.fecha_publicacion = new Date().toISOString().slice(0,10);
+				form.reset();
 				this.router.navigate(['/tabs/add-food']);
 			},
 			err => {
-				console.log(err.error)
+				console.log(err.error);
+				form.reset();
 			})
 	}
 }
