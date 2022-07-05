@@ -7,7 +7,7 @@ const app = require('../index');
 describe('POST /api/login', () => {
     it('Se devuelve un mensaje "Login completado" si el login se ha realizado correctamente', done => {
         const data = {
-            email: 'alex@ua.es',
+            email: 'ald19@alu.ua.es',
             password: '12345'
         }
         request(app)
@@ -33,7 +33,7 @@ describe('POST /api/login', () => {
             .set('Accept', 'application/json')
             .expect('Content-Type', /text/)
             .expect(400)
-            .expect('Credenciales inválidas')
+            .expect({msg: 'Credenciales inválidas'})
             .end(err => {
                 if(err) return done(err);
                 done();
